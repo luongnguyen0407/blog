@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import AuthMain from "../layouts/AuthMain";
 import Heading from "../components/Heading";
 import Input from "../components/Input";
@@ -12,18 +11,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
-import { auth, db } from "../firebase-app/firebase-config";
-const RegisterPage = () => {
+import { auth } from "../firebase-app/firebase-config";
+const LoginPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
-
   //validate
   const schema = yup.object({
-    username: yup
-      .string()
-      .min(3, "username quá ngắn")
-      .required("Bạn chưa nhập username"),
     email: yup
       .string()
       .email("Định dạng email không đúng")
@@ -43,24 +37,15 @@ const RegisterPage = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+
   //submit
   const onSubmitHandler = async (value) => {
     if (!isValid) return;
     setIsLoading(true);
     try {
-      console.log(value);
-      const { email, password, username } = value;
-      await createUserWithEmailAndPassword(auth, email, password);
-      const colsRef = collection(db, "user");
-      await addDoc(colsRef, {
-        username,
-        email,
-        password,
-      });
-      await updateProfile(auth.currentUser, {
-        displayName: username,
-      });
-      toast.success("Đăng ký thành công", {
+      const { email, password } = value;
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Đăng Nhập thành công", {
         delay: 0,
         pauseOnHover: false,
       });
@@ -68,7 +53,6 @@ const RegisterPage = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
       toast.warn("Sever không phản hồi");
     }
   };
@@ -83,17 +67,12 @@ const RegisterPage = () => {
 
   return (
     <AuthMain>
-      <Heading center>Đăng Ký</Heading>
+      <Heading center>Đăng Nhập</Heading>
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
         className="w-full flex flex-col items-center gap-3"
         action=""
       >
-        <Input
-          control={control}
-          placeholder="User Name"
-          name="username"
-        ></Input>
         <Input control={control} placeholder="Email" name="email"></Input>
         <Input
           control={control}
@@ -109,17 +88,17 @@ const RegisterPage = () => {
           )}
         </Input>
         <p>
-          Bạn đã có tài khoản ?
-          <Link className="text-blue-300 text-sm" to={"/login"}>
-            đăng nhập
+          Bạn chưa có tài khoản ?
+          <Link className="text-blue-300 text-sm" to={"/register"}>
+            đăng ký
           </Link>
         </p>
         <Button disabled={isLoading} className="max-w-sm mt-3" type="submit">
-          {isLoading ? <Loading></Loading> : " Đăng Ký"}
+          {isLoading ? <Loading></Loading> : " Đăng nhập"}
         </Button>
       </form>
     </AuthMain>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
