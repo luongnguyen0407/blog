@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import PropTypes from "prop-types";
 
 const Button = ({
   className = "",
@@ -16,5 +17,11 @@ const Button = ({
     </button>
   );
 };
-
+Button.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string])
+    .isRequired,
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+};
 export default memo(Button);

@@ -2,7 +2,7 @@ import React from "react";
 import Heading from "../Heading";
 import Tag from "../Tag";
 import DatePost from "./DatePost";
-
+import PropTypes from "prop-types";
 const CardFeature = ({ tag, heading }) => {
   return (
     <div className="relative overflow-hidden rounded-lg cursor-pointer">
@@ -26,5 +26,8 @@ const CardFeature = ({ tag, heading }) => {
     </div>
   );
 };
-
+CardFeature.propTypes = {
+  tag: PropTypes.string,
+  heading: PropTypes.string,
+};
 export default CardFeature;

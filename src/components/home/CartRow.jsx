@@ -1,6 +1,7 @@
 import React from "react";
 import Heading from "../Heading";
 import Tag from "../Tag";
+import PropTypes from "prop-types";
 import DatePost from "./DatePost";
 
 const CartRow = ({ tag, heading }) => {
@@ -23,5 +24,8 @@ const CartRow = ({ tag, heading }) => {
     </div>
   );
 };
-
+CartRow.propTypes = {
+  tag: PropTypes.string,
+  heading: PropTypes.string,
+};
 export default CartRow;

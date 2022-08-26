@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ErrorFallback from "../components/Error/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
+
 import { useAuth } from "../contexts/auth-context";
 const AuthMain = ({ children }) => {
   const navigate = useNavigate();
@@ -20,7 +23,9 @@ const AuthMain = ({ children }) => {
             alt=""
           />
         </Link>
-        <div className="p-3 w-full">{children}</div>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="p-3 w-full">{children}</div>
+        </ErrorBoundary>
       </div>
     </div>
   );

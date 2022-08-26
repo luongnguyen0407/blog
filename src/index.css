@@ -16,3 +16,13 @@
 .overlay {
   background-color: rgba(0, 0, 0, 0.25);
 }
+.reHidden .addPost {
+  padding: 5px 0;
+}
+.nav-bar .activeAdd.active {
+  background-color: rgb(233 213 255);
+}
+.navDash .active {
+  background-color: rgb(59 130 246);
+  color: white;
+}

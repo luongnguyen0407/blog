@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 const DatePost = ({ color = "text-white" }) => {
   return (
     <div className={`flex text-sm font-bold  ${color}`}>
@@ -8,5 +8,7 @@ const DatePost = ({ color = "text-white" }) => {
     </div>
   );
 };
-
+DatePost.propTypes = {
+  color: PropTypes.string,
+};
 export default DatePost;

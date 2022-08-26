@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Heading = ({ children, center, size = "text-3xl", className = "" }) => {
   return (
@@ -11,5 +12,11 @@ const Heading = ({ children, center, size = "text-3xl", className = "" }) => {
     </h2>
   );
 };
-
+Heading.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string])
+    .isRequired,
+  size: PropTypes.string,
+  center: PropTypes.bool,
+};
 export default Heading;

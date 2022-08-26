@@ -2,6 +2,7 @@ import React from "react";
 import Heading from "../Heading";
 import Tag from "../Tag";
 import DatePost from "./DatePost";
+import PropTypes from "prop-types";
 
 const CartCol = ({ className }) => {
   return (
@@ -20,6 +21,9 @@ const CartCol = ({ className }) => {
       <DatePost color="text-gray-400"></DatePost>
     </div>
   );
+};
+CartCol.propTypes = {
+  className: PropTypes.string,
 };
 
 export default CartCol;

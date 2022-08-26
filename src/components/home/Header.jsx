@@ -5,15 +5,16 @@ import Title from "./Title";
 import { useAuth } from "../../contexts/auth-context";
 import { auth } from "../../firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
+import { NavLink } from "react-router-dom";
 
 import {
   AiOutlineInfoCircle,
   AiOutlineHome,
   AiOutlineMedicineBox,
   AiOutlineDoubleRight,
+  AiOutlineFileAdd,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { async } from "@firebase/util";
 import { toast } from "react-toastify";
 
 const LIST_MENU = [
@@ -60,7 +61,7 @@ const Header = () => {
       >
         <div
           onClick={() => setIsZoom(!isZoom)}
-          className="absolute py-2 px-1 rounded-tl-lg rounded-bl-lg text-white bg-blue-400 cursor-pointer top-2/4 right-0 -translate-y-2/4"
+          className="absolute py-2 rounded-tl-lg rounded-bl-lg text-white bg-blue-400 cursor-pointer top-2/4 right-0 -translate-y-2/4"
         >
           <AiOutlineDoubleRight
             className={`${isZoom ? "" : "rotate-180"} transition-all`}
@@ -98,6 +99,16 @@ const Header = () => {
                 to={item.path}
               ></NavItem>
             ))}
+            <NavLink
+              className="activeAdd bg-purple-200 rounded-lg"
+              to={"/dashboard/addPost"}
+            >
+              <div className="addPost flex py-10 justify-center cursor-pointer  items-center ">
+                <div className="rounded-full bg-white p-2  text-gray-400 font-bold">
+                  <AiOutlineFileAdd />
+                </div>
+              </div>
+            </NavLink>
           </nav>
         </div>
       </div>
