@@ -1,9 +1,11 @@
 import React from "react";
 
-const Heading = ({ children, center }) => {
+const Heading = ({ children, center, size = "text-3xl", className = "" }) => {
   return (
     <h2
-      className={`font-semibold text-3xl my-2 ${center ? "text-center" : ""}`}
+      className={`font-semibold ${size} ${className}  my-2 ${
+        center ? "text-center" : ""
+      }`}
     >
       {children}
     </h2>

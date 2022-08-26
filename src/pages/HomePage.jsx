@@ -1,14 +1,12 @@
-import { signOut } from "firebase/auth";
 import React from "react";
-import { auth } from "../firebase-app/firebase-config";
+import Banner from "../components/home/Banner";
+import Content from "../components/home/Content";
 
 const HomePage = () => {
-  const Signout = () => {
-    signOut(auth);
-  };
   return (
-    <div>
-      <button onClick={Signout}>lout</button>
+    <div className="p-4 w-full">
+      <Banner></Banner>
+      <Content></Content>
     </div>
   );
 };

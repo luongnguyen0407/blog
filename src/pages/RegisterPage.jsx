@@ -22,7 +22,7 @@ const RegisterPage = () => {
   const schema = yup.object({
     username: yup
       .string()
-      .min(3, "username quá ngắn")
+      .max(10, "username quá dài")
       .required("Bạn chưa nhập username"),
     email: yup
       .string()

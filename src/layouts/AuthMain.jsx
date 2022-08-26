@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useAuth } from "../contexts/auth-context";
 const AuthMain = ({ children }) => {
   const navigate = useNavigate();
