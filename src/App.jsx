@@ -2,9 +2,10 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Loading from "./components/Loading";
 import { AuthProvider } from "./contexts/auth-context";
-import MainLayout from "./layouts/MainLayout";
-import Dashboard from "./layouts/Dashboard";
-import Category from "./pages/Dashboard/Category";
+const Dashboard = lazy(() => import("./layouts/Dashboard"));
+const MainLayout = lazy(() => import("./layouts/MainLayout"));
+const Category = lazy(() => import("./pages/Dashboard/Category"));
+const AddNewPost = lazy(() => import("./pages/Dashboard/AddNewPost"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -21,7 +22,7 @@ function App() {
               <Route element={<Dashboard></Dashboard>}>
                 <Route
                   path="/dashboard/addPost"
-                  element={<AboutPage></AboutPage>}
+                  element={<AddNewPost></AddNewPost>}
                 ></Route>
                 <Route
                   path="/dashboard/category"

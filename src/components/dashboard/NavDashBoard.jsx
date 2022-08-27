@@ -25,7 +25,7 @@ const LIST_NAV = [
 ];
 const NavDashBoard = () => {
   return (
-    <nav className="navDash flex justify-center p-3">
+    <nav className="navDash flex justify-center p-3 pb-5 border-b border-gray-300">
       {LIST_NAV.map((item) => (
         <NavItem
           key={item.title}

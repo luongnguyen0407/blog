@@ -1,5 +1,7 @@
 import React, { memo } from "react";
 import { useController } from "react-hook-form";
+import PropTypes from "prop-types";
+
 const Input = ({ control, icon, children, ...props }) => {
   const { field } = useController({
     control,
@@ -18,5 +20,7 @@ const Input = ({ control, icon, children, ...props }) => {
     </div>
   );
 };
-
+Input.propTypes = {
+  control: PropTypes.object.isRequired,
+};
 export default memo(Input);
