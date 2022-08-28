@@ -1,15 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useWatch } from "react-hook-form";
 import useOnClickOutside from "../../../hooks/useClickOutSide";
-const DropDowHook = ({ name, setValue, control }) => {
+const DropDowHook = ({ name, setValue, control, data }) => {
   const { show, setShow, nodeRef } = useOnClickOutside();
-  const jobValue = useWatch({
+  const [categorySelect, setCategorySelect] = useState("Select you Category");
+  useWatch({
     control,
     name,
     defaultValue: "",
   });
   const handleSetValue = (e) => {
     setValue(name, e.target.dataset.value);
+    setCategorySelect(e.target.textContent);
     setShow(false);
   };
 
@@ -19,7 +21,7 @@ const DropDowHook = ({ name, setValue, control }) => {
         onClick={() => setShow(!show)}
         className="p-5 bg-gray-200 border border-gray-200 rounded-lg flex items-center justify-between"
       >
-        <p>Select you job</p>
+        <p>{categorySelect}</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -40,27 +42,17 @@ const DropDowHook = ({ name, setValue, control }) => {
           show ? "" : "opacity-0 invisible"
         }`}
       >
-        <div
-          onClick={handleSetValue}
-          className="p-5 bg-white border-gray-100 border-b border-r border-l"
-          data-value="developer"
-        >
-          Developer
-        </div>
-        <div
-          onClick={handleSetValue}
-          className="p-5 bg-white border-gray-100 border-b border-r border-l"
-          data-value="doctor"
-        >
-          Doctor
-        </div>
-        <div
-          onClick={handleSetValue}
-          className="p-5  bg-white"
-          data-value="gamer"
-        >
-          Gamer
-        </div>
+        {data.length > 0 &&
+          data.map((category) => (
+            <div
+              key={category.id}
+              onClick={handleSetValue}
+              className="p-5 bg-white border-gray-100 border-b border-r border-l"
+              data-value={category.id}
+            >
+              {category.name}
+            </div>
+          ))}
       </div>
     </div>
   );
