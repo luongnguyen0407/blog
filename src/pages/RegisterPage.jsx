@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import AuthMain from "../layouts/AuthMain";
 import Heading from "../components/Heading";
 import Input from "../components/Input";
@@ -51,12 +51,17 @@ const RegisterPage = () => {
       console.log(value);
       const { email, password, username } = value;
       await createUserWithEmailAndPassword(auth, email, password);
-      const colsRef = collection(db, "user");
-      await addDoc(colsRef, {
+      // const colsRef = collection(db, "users");
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
         username,
         email,
         password,
       });
+      // await addDoc(colsRef, {
+      //   username,
+      //   email,
+      //   password,
+      // });
       await updateProfile(auth.currentUser, {
         displayName: username,
       });
@@ -69,7 +74,7 @@ const RegisterPage = () => {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
-      toast.warn("Sever không phản hồi");
+      toast.warn("Email đã sử dụng");
     }
   };
 

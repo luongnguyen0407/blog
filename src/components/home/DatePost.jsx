@@ -1,10 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-const DatePost = ({ color = "text-white" }) => {
+import { Link } from "react-router-dom";
+const DatePost = ({
+  color = "text-white",
+  author = "",
+  date = "",
+  to = "/",
+}) => {
   return (
     <div className={`flex text-sm font-bold  ${color}`}>
-      <div>Mar 23 - </div>
-      <div>Andiez Le</div>
+      <div>{date}-</div>
+      <div>
+        <Link to={to}>{author}</Link>
+      </div>
     </div>
   );
 };

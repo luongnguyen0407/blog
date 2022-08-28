@@ -5,7 +5,7 @@ import Title from "./Title";
 import { useAuth } from "../../contexts/auth-context";
 import { auth } from "../../firebase-app/firebase-config";
 import { signOut } from "firebase/auth";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   AiOutlineInfoCircle,

@@ -1,14 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const Heading = ({ children, center, size = "text-3xl", className = "" }) => {
+const Heading = ({
+  children,
+  center,
+  size = "text-3xl",
+  className = "",
+  to = "/",
+}) => {
   return (
     <h2
       className={`font-semibold ${size} ${className}  my-2 ${
         center ? "text-center" : ""
       }`}
     >
-      {children}
+      <Link to={to}>{children}</Link>
     </h2>
   );
 };

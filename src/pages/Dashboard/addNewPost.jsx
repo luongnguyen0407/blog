@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import {
   getStorage,
   ref,
@@ -47,6 +54,7 @@ const AddNewPost = () => {
     control,
     setValue,
     watch,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -67,7 +75,11 @@ const AddNewPost = () => {
       return;
     }
     setIsLoading(true);
-    value.slug = slugify(value.slug || value.title, { lower: true });
+    value.slug = slugify(value.slug || value.title, {
+      lower: true,
+      locale: "vi",
+      remove: /[*+~.()'"!:@]/g,
+    });
     await handleUploadImg(value.fileImg, value);
     console.log(value);
     // create post
@@ -128,8 +140,18 @@ const AddNewPost = () => {
       slug,
       status,
       imgUrl,
+      createAt: serverTimestamp(),
     });
     toast.success("Tạo bài viết thành công");
+    //reset field
+    reset({
+      title: "",
+      slug: "",
+      status: 2,
+      category: "",
+      hot: false,
+    });
+    handleDeleteImg();
     setIsLoading(false);
   };
   //get select image
