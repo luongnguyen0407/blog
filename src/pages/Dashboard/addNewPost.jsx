@@ -1,4 +1,20 @@
 import React, { useEffect, useState } from "react";
+import Toggle from "../../components/dashboard/Toggle";
+import Radio from "../../components/dashboard/Radio";
+import Loading from "../../components/Loading";
+import Label from "../../components/dashboard/Label";
+import InputBorder from "../../components/dashboard/InputBorder";
+import ImageUpload from "../../components/dashboard/ImageUpload";
+import Field from "../../components/dashboard/Field";
+import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
+import Button from "../../components/Button";
+import { useAuth } from "../../contexts/auth-context";
+import { db } from "../../firebase-app/firebase-config";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import slugify from "slugify";
 import {
   addDoc,
   collection,
@@ -13,22 +29,6 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import slugify from "slugify";
-import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
-import Field from "../../components/dashboard/Field";
-import ImageUpload from "../../components/dashboard/ImageUpload";
-import InputBorder from "../../components/dashboard/InputBorder";
-import Label from "../../components/dashboard/Label";
-import Radio from "../../components/dashboard/Radio";
-import Toggle from "../../components/dashboard/Toggle";
-import { db } from "../../firebase-app/firebase-config";
-import Loading from "../../components/Loading";
-import Button from "../../components/Button";
-import { useAuth } from "../../contexts/auth-context";
 
 const postStatus = {
   Approved: 1,
@@ -50,7 +50,7 @@ const AddNewPost = () => {
 
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
     setValue,
     watch,
@@ -81,7 +81,6 @@ const AddNewPost = () => {
       remove: /[*+~.()'"!:@]/g,
     });
     await handleUploadImg(value.fileImg, value);
-    console.log(value);
     // create post
   };
   const handleUploadImg = async (file, value) => {
@@ -130,7 +129,7 @@ const AddNewPost = () => {
     );
   };
   const addNewPostHandler = async (imgUrl, value) => {
-    const { hot, slug, status, title } = value;
+    const { hot, slug, title } = value;
     const postRef = collection(db, "posts");
     await addDoc(postRef, {
       categoryId: value.category,
@@ -138,7 +137,7 @@ const AddNewPost = () => {
       title,
       hot,
       slug,
-      status,
+      status: Number(value.status),
       imgUrl,
       createAt: serverTimestamp(),
     });
@@ -185,7 +184,7 @@ const AddNewPost = () => {
     const resCategory = [];
     const getData = async () => {
       const cateRef = collection(db, "category");
-      const q = query(cateRef, where("status", "==", "1"));
+      const q = query(cateRef, where("status", "==", 1));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         resCategory.push({
@@ -303,8 +302,9 @@ const AddNewPost = () => {
           type="submit"
           className="bg-blue-400 max-w-[200px] m-auto flex items-center mt-4"
           disabled={isLoading}
+          loading={isLoading}
         >
-          {isLoading ? <Loading></Loading> : "Submit"}
+          Submit
         </Button>
       </form>
     </div>

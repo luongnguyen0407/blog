@@ -1,5 +1,4 @@
-import { async } from "@firebase/util";
-import { collection, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase-app/firebase-config";
 import CardFeature from "./CartFeature";
@@ -12,8 +11,9 @@ const Feature = () => {
       const cateRef = collection(db, "posts");
       const q = query(
         cateRef,
-        where("status", "==", "1"),
-        where("hot", "==", true)
+        where("status", "==", 1),
+        where("hot", "==", true),
+        limit(3)
       );
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {

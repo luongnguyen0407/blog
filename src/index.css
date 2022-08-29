@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-.nav-bar .active {
-  background-color: rgb(59 130 246);
-  color: white;
+@layer {
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;800&display=swap");
+  .nav-bar .active {
+    background-color: rgb(59 130 246);
+    color: white;
+  }
+  body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Poppins", sans-serif;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    color: #232323;
+  }
 }
 .reHidden .isHidden {
   display: none;
@@ -36,4 +47,28 @@
   position: absolute;
   width: 1px;
   white-space: nowrap;
+}
+.tableCategory {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+.tableCategory table {
+  width: 100%;
+}
+.tableCategory thead {
+  background-color: #f7f7f8;
+}
+.tableCategory th,
+.tableCategory td {
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.tableCategory th {
+  padding: 20px 30px;
+  font-weight: 600;
+  text-align: left;
+}
+.tableCategory td {
+  padding: 15px 30px;
 }

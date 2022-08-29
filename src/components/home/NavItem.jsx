@@ -5,7 +5,7 @@ import Title from "./Title";
 const NavItem = ({ to = "/", title, icon }) => {
   return (
     <NavLink
-      className="itemShowCenter w-full p-2 rounded-lg flex items-center gap-1 text-xl text-gray-500"
+      className="itemShowCenter w-full p-2 rounded-lg flex items-center gap-1 text-xl text-gray-300"
       to={to}
     >
       {icon}

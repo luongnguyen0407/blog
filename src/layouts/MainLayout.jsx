@@ -8,7 +8,7 @@ const MainLayout = () => {
   const { userInfor } = useAuth();
   useEffect(() => {
     document.title = "Đăng Ký";
-    if (!userInfor?.email) {
+    if (!userInfor) {
       navigate("/login");
     }
   }, [userInfor]);

@@ -22,7 +22,7 @@ const CardFeature = ({ data }) => {
     }
     getData();
   }, [data.useCreatePost]);
-  if (!data || !data.id || !author || !category) return;
+  if (!data || !data.id || !author) return;
   const date = new Date(data?.createAt?.seconds * 1000);
   const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
@@ -31,7 +31,9 @@ const CardFeature = ({ data }) => {
       <img className="w-full h-full object-cover" src={data.imgUrl} alt="" />
       <div className="absolute top-0 p-2 left-0 w-full items-center h-full">
         <div className="flex justify-between">
-          <Tag to={category.slug}>{category?.name}</Tag>
+          <Tag to={category?.slug || "doi-song"}>
+            {category?.name || "Đời sống"}
+          </Tag>
           <div>
             <DatePost
               date={createDate}
