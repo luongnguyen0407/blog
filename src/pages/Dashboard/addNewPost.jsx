@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Toggle from "../../components/dashboard/Toggle";
 import Radio from "../../components/dashboard/Radio";
-import Loading from "../../components/Loading";
 import Label from "../../components/dashboard/Label";
 import InputBorder from "../../components/dashboard/InputBorder";
 import ImageUpload from "../../components/dashboard/ImageUpload";

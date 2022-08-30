@@ -1,18 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase-app/firebase-config";
 import Slug from "./Slug";
 import ActionUpdate from "./iconAction/ActionUpdate";
 import ActionDelete from "./iconAction/ActionDelete";
 import ActionView from "./iconAction/ActionView";
+import { debounce } from "lodash";
 import Swal from "sweetalert2";
 const Category = () => {
   const [category, setCategory] = useState([]);
+  const [filter, setFilter] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const colRef = collection(db, "category");
-    onSnapshot(colRef, (snapshot) => {
+    const newRef = filter
+      ? query(
+          colRef,
+          where("name", ">=", filter),
+          where("name", "<=", filter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapshot) => {
       let resCategory = [];
       snapshot.forEach((doc) => {
         resCategory.push({
@@ -22,7 +38,7 @@ const Category = () => {
       });
       setCategory(resCategory);
     });
-  }, []);
+  }, [filter]);
   const handleDeleteCategory = async (categoryId) => {
     if (!categoryId) return;
     const colRef = doc(db, "category", categoryId);
@@ -41,14 +57,27 @@ const Category = () => {
       }
     });
   };
+  const searchHandler = debounce((e) => {
+    const query =
+      e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+    setFilter(query);
+  }, 500);
   return (
     <div className="p-4">
-      <Link
-        to={"/dashboard/category/addcategory"}
-        className="p-3 bg-green-300 rounded-lg my-4 text-white"
-      >
-        Thêm Category
-      </Link>
+      <div className="flex gap-3">
+        <Link
+          to={"/dashboard/category/addcategory"}
+          className="p-3 bg-green-300 rounded-lg my-4 text-white"
+        >
+          Thêm Category
+        </Link>
+        <input
+          type="text"
+          placeholder="Search..."
+          className="p-2 outline-none"
+          onChange={searchHandler}
+        />
+      </div>
       <div className="table w-full mt-4">
         <table className="w-full tableCategory">
           <thead>

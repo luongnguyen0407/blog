@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import AuthMain from "../layouts/AuthMain";
 import Heading from "../components/Heading";
 import Input from "../components/Input";
@@ -13,6 +19,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import { auth, db } from "../firebase-app/firebase-config";
+import { roleUser, statusUser } from "../utils/Const";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +29,7 @@ const RegisterPage = () => {
   const schema = yup.object({
     username: yup
       .string()
-      .max(10, "username quá dài")
+      .max(16, "username quá dài")
       .required("Bạn chưa nhập username"),
     email: yup
       .string()
@@ -56,6 +63,11 @@ const RegisterPage = () => {
         username,
         email,
         password,
+        avatar:
+          "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
+        status: statusUser.Active,
+        role: roleUser.User,
+        createAt: serverTimestamp(),
       });
       // await addDoc(colsRef, {
       //   username,
@@ -64,6 +76,8 @@ const RegisterPage = () => {
       // });
       await updateProfile(auth.currentUser, {
         displayName: username,
+        photoURL:
+          "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
       });
       toast.success("Đăng ký thành công", {
         delay: 0,

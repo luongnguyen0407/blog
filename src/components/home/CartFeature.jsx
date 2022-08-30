@@ -22,7 +22,7 @@ const CardFeature = ({ data }) => {
     }
     getData();
   }, [data.useCreatePost]);
-  if (!data || !data.id || !author) return;
+  if (!data || !data.id) return;
   const date = new Date(data?.createAt?.seconds * 1000);
   const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
@@ -37,8 +37,8 @@ const CardFeature = ({ data }) => {
           <div>
             <DatePost
               date={createDate}
-              author={author?.username}
-              to={slugify(author?.username, { lower: true })}
+              author={author?.username || "Khuyết danh"}
+              to={slugify(author?.username || "Khuyết danh", { lower: true })}
             ></DatePost>
           </div>
         </div>

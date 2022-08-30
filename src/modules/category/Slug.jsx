@@ -15,7 +15,7 @@ const Slug = ({ status }) => {
       break;
   }
   return (
-    <div className={`p-1 rounded-lg text-center ${style}`}>
+    <div className={`p-2 inline-block rounded-lg text-center ${style}`}>
       {status === statusCategory.Approved ? "Approved" : "Unapproved"}
     </div>
   );

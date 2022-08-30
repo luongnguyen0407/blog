@@ -7,10 +7,11 @@ const ImageUpload = (props) => {
     handleDeleteImg,
     previewUrl,
     image = "",
+    size = "",
     ...rest
   } = props;
   return (
-    <div className="relative group">
+    <div className={`relative group ${className}`}>
       {previewUrl && (
         <div
           onClick={handleDeleteImg}
@@ -42,7 +43,9 @@ const ImageUpload = (props) => {
           onChange={() => {}}
           {...rest}
         />
-        <div className="flex justify-center flex-col items-center text-center pointer-events-none">
+        <div
+          className={`flex justify-center flex-col items-center text-center pointer-events-none ${size}`}
+        >
           {previewUrl && (
             <>
               <img

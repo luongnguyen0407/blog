@@ -58,16 +58,19 @@ const UpdateCategory = () => {
   //update
   const updateHandler = async (value) => {
     if (!isValid) return;
+    const cloneValue = { ...value };
     const colRef = doc(db, "category", categoryId);
+    cloneValue.name =
+      cloneValue.name.charAt(0).toUpperCase() + cloneValue.name.slice(1);
     try {
       await updateDoc(colRef, {
-        name: value.name,
-        slug: slugify(value.name || value.slug, {
+        name: cloneValue.name,
+        slug: slugify(cloneValue.name || cloneValue.slug, {
           lower: true,
           locale: "vi",
           remove: /[*+~.()'"!:@]/g,
         }),
-        status: Number(value.status),
+        status: Number(cloneValue.status),
       });
       toast.success("Cập nhật thành công");
     } catch (error) {

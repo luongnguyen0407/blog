@@ -1,6 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
+const AddUser = lazy(() => import("./modules/user/AddUser"));
+const ManageUser = lazy(() => import("./modules/user/ManageUser"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound "));
 const Dashboard = lazy(() => import("./layouts/Dashboard"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
@@ -38,6 +40,14 @@ function App() {
                 <Route
                   path="/dashboard/category/updatecategory"
                   element={<UpdateCategory></UpdateCategory>}
+                ></Route>
+                <Route
+                  path="/dashboard/user"
+                  element={<ManageUser></ManageUser>}
+                ></Route>
+                <Route
+                  path="/dashboard/user/useraddnew"
+                  element={<AddUser></AddUser>}
                 ></Route>
               </Route>
             </Route>

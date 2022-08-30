@@ -50,6 +50,8 @@ const AddCategory = () => {
       locale: "vi",
       remove: /[*+~.()'"!:@]/g,
     });
+    cloneValue.name =
+      cloneValue.name.charAt(0).toUpperCase() + cloneValue.name.slice(1);
     try {
       const colRef = collection(db, "category");
       addDoc(colRef, {
