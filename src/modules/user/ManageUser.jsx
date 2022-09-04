@@ -1,6 +1,14 @@
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { db } from "../../firebase-app/firebase-config";
 import { roleUser, statusUser } from "../../utils/Const";
@@ -9,9 +17,18 @@ import ActionUpdate from "../category/iconAction/ActionUpdate";
 
 const ManageUser = () => {
   const [listUser, setListUser] = useState();
+  const [filter, setFilter] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     const colRef = collection(db, "users");
-    onSnapshot(colRef, (snapshot) => {
+    const newRef = filter
+      ? query(
+          colRef,
+          where("username", ">=", filter),
+          where("username", "<=", filter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapshot) => {
       const arrUser = [];
       snapshot.forEach((doc) => {
         arrUser.push({
@@ -21,7 +38,7 @@ const ManageUser = () => {
       });
       setListUser(arrUser);
     });
-  }, []);
+  }, [filter]);
   const renderRoleLabel = (role) => {
     switch (role) {
       case roleUser.Admin:
@@ -77,6 +94,11 @@ const ManageUser = () => {
       }
     });
   };
+  const searchHandler = debounce((e) => {
+    const query =
+      e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+    setFilter(query);
+  }, 500);
   return (
     <div className="p-4">
       <div className="flex gap-3">
@@ -90,6 +112,7 @@ const ManageUser = () => {
           type="text"
           placeholder="Search..."
           className="p-2 outline-none"
+          onChange={searchHandler}
         />
       </div>
       <div className="table w-full mt-4">
@@ -133,7 +156,11 @@ const ManageUser = () => {
                   <td>{renderRoleLabel(user.role)}</td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <ActionUpdate />
+                      <ActionUpdate
+                        onClick={() =>
+                          navigate(`/dashboard/user/update?id=${user.id}`)
+                        }
+                      />
                       <ActionDelete onClick={() => handleDeleteUser(user)} />
                     </div>
                   </td>

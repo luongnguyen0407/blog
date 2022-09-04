@@ -35,7 +35,7 @@ const LoginPage = () => {
     control,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   //submit

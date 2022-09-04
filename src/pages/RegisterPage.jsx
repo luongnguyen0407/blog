@@ -48,7 +48,7 @@ const RegisterPage = () => {
     control,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
   //submit
   const onSubmitHandler = async (value) => {

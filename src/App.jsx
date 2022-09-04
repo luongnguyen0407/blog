@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/auth-context";
+const UpdateUser = lazy(() => import("./modules/user/UpdateUser"));
 const AddUser = lazy(() => import("./modules/user/AddUser"));
 const ManageUser = lazy(() => import("./modules/user/ManageUser"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound "));
@@ -48,6 +49,10 @@ function App() {
                 <Route
                   path="/dashboard/user/useraddnew"
                   element={<AddUser></AddUser>}
+                ></Route>
+                <Route
+                  path="/dashboard/user/update"
+                  element={<UpdateUser></UpdateUser>}
                 ></Route>
               </Route>
             </Route>
