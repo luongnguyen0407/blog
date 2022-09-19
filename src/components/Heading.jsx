@@ -15,7 +15,9 @@ const Heading = ({
         center ? "text-center" : ""
       }`}
     >
-      <Link to={to}>{children}</Link>
+      <Link to={to} className="block">
+        {children}
+      </Link>
     </h2>
   );
 };

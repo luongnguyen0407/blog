@@ -1,6 +1,6 @@
 import Toggle from "../../components/dashboard/Toggle";
 import slugify from "slugify";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Radio from "../../components/dashboard/Radio";
 import Label from "../../components/dashboard/Label";
 import InputBorder from "../../components/dashboard/InputBorder";
@@ -9,13 +9,15 @@ import Field from "../../components/dashboard/Field";
 import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
 import Button from "../../components/Button";
 import * as yup from "yup";
+import "react-quill/dist/quill.snow.css";
+import "./Post.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../contexts/auth-context";
 import { toast } from "react-toastify";
 import { db } from "../../firebase-app/firebase-config";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill, { Quill } from "react-quill";
+import ImageUploader from "quill-image-uploader";
 import {
   addDoc,
   collection,
@@ -30,12 +32,14 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import axios from "axios";
 
 const postStatus = {
   Approved: 1,
   Pending: 2,
   Reject: 3,
 };
+Quill.register("modules/imageUploader", ImageUploader);
 const AddNewPost = () => {
   const [selectImageFile, setSelectImageFile] = useState();
   const [previewUrl, setPreviewUrl] = useState("");
@@ -51,7 +55,7 @@ const AddNewPost = () => {
   });
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     control,
     setValue,
     watch,
@@ -74,6 +78,10 @@ const AddNewPost = () => {
   const handleSaveValue = async (value) => {
     if (watchfileImg === undefined) {
       toast.error("Bạn cần chọn ảnh");
+      return;
+    }
+    if (!contentPost) {
+      toast.error("Bạn cần điền nội dung bài viết");
       return;
     }
     setIsLoading(true);
@@ -141,6 +149,7 @@ const AddNewPost = () => {
       slug,
       status: Number(value.status),
       imgUrl,
+      detailPost: contentPost,
       createAt: serverTimestamp(),
     });
     toast.success("Tạo bài viết thành công");
@@ -209,7 +218,36 @@ const AddNewPost = () => {
   const handleDeleteImg = () => {
     setSelectImageFile(undefined);
   };
-
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote"],
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["link", "image"],
+      ],
+      imageUploader: {
+        upload: async (file) => {
+          console.log("upload: ~ file", file);
+          const bodyFormData = new FormData();
+          console.log("upload: ~ bodyFormData", bodyFormData);
+          bodyFormData.append("image", file);
+          const response = await axios({
+            method: "post",
+            url: "https://api.imgbb.com/1/upload?key=55707bd44a68a131b540327e9b99a0d8",
+            data: bodyFormData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          return response.data.data.url;
+        },
+      },
+    }),
+    []
+  );
   return (
     <div className="p-3">
       <form onSubmit={handleSubmit(handleSaveValue)} action="">
@@ -300,9 +338,10 @@ const AddNewPost = () => {
             ></DropDowHook>
           </Field>
         </div>
-        <div className=" mt-6">
+        <div className="mt-6 entry-content">
           <ReactQuill
             theme="snow"
+            modules={modules}
             value={contentPost}
             onChange={setContentPost}
           />
