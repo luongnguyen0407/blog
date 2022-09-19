@@ -26,12 +26,13 @@ const Feature = () => {
     };
     getData();
   }, []);
-  if (!postHot) return;
   return (
     <div className="grid grid-cols-3 gap-4">
-      {postHot.map((post) => (
-        <CardFeature key={post.id} data={post}></CardFeature>
-      ))}
+      {!postHot && <div>loading</div>}
+      {postHot &&
+        postHot.map((post) => (
+          <CardFeature key={post.id} data={post}></CardFeature>
+        ))}
     </div>
   );
 };

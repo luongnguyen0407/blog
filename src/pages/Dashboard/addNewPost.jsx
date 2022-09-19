@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import Toggle from "../../components/dashboard/Toggle";
+import slugify from "slugify";
+import React, { useEffect, useState } from "react";
 import Radio from "../../components/dashboard/Radio";
 import Label from "../../components/dashboard/Label";
 import InputBorder from "../../components/dashboard/InputBorder";
@@ -7,13 +8,14 @@ import ImageUpload from "../../components/dashboard/ImageUpload";
 import Field from "../../components/dashboard/Field";
 import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
 import Button from "../../components/Button";
-import { useAuth } from "../../contexts/auth-context";
-import { db } from "../../firebase-app/firebase-config";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import slugify from "slugify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../contexts/auth-context";
+import { toast } from "react-toastify";
+import { db } from "../../firebase-app/firebase-config";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   addDoc,
   collection,
@@ -40,13 +42,13 @@ const AddNewPost = () => {
   const [dataCategory, setDataCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { userInfor } = useAuth();
+  const [contentPost, setContentPost] = useState("");
 
   //validate
   const schema = yup.object({
     title: yup.string().required("Bạn phải nhập tiêu đề"),
     category: yup.string().required("Bạn phải chọn Category"),
   });
-
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -68,6 +70,7 @@ const AddNewPost = () => {
   const watchStatus = watch("status");
   const watchHot = watch("hot");
   const watchfileImg = watch("fileImg");
+
   const handleSaveValue = async (value) => {
     if (watchfileImg === undefined) {
       toast.error("Bạn cần chọn ảnh");
@@ -296,6 +299,13 @@ const AddNewPost = () => {
               data={dataCategory}
             ></DropDowHook>
           </Field>
+        </div>
+        <div className=" mt-6">
+          <ReactQuill
+            theme="snow"
+            value={contentPost}
+            onChange={setContentPost}
+          />
         </div>
         <Button
           type="submit"

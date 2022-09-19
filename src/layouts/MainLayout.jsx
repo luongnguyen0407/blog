@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/home/Header";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
+import PostDetailsPage from "../pages/PostDetailsPage";
 const MainLayout = () => {
   const navigate = useNavigate();
   const { userInfor } = useAuth();
   useEffect(() => {
-    document.title = "Đăng Ký";
     if (!userInfor) {
       navigate("/login");
     }

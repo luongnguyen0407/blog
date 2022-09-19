@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import AuthMain from "../layouts/AuthMain";
-import Heading from "../components/Heading";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import { IconEyeHide, IconEyeShow } from "../icons";
-import { Link, useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { toast } from "react-toastify";
 import Loading from "../components/Loading";
+import Input from "../components/Input";
+import Heading from "../components/Heading";
+import Button from "../components/Button";
+import AuthMain from "../layouts/AuthMain";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { IconEyeHide, IconEyeShow } from "../icons";
 import { auth } from "../firebase-app/firebase-config";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,7 +40,6 @@ const LoginPage = () => {
 
   //submit
   const onSubmitHandler = async (value) => {
-    if (!isValid) return;
     setIsLoading(true);
     try {
       const { email, password } = value;
@@ -53,7 +52,8 @@ const LoginPage = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
-      toast.warn("Sever không phản hồi");
+      toast.warn("Sai Email Hoặc Mật Khẩu");
+      setIsLoading(false);
     }
   };
 

@@ -1,24 +1,18 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import AuthMain from "../layouts/AuthMain";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import * as yup from "yup";
+import Button from "../components/Button";
 import Heading from "../components/Heading";
 import Input from "../components/Input";
-import Button from "../components/Button";
-import { IconEyeHide, IconEyeShow } from "../icons";
-import { Link, useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 import { auth, db } from "../firebase-app/firebase-config";
+import { IconEyeHide, IconEyeShow } from "../icons";
+import AuthMain from "../layouts/AuthMain";
 import { roleUser, statusUser } from "../utils/Const";
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -44,7 +38,7 @@ const RegisterPage = () => {
   //end validate
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     control,
   } = useForm({
     resolver: yupResolver(schema),
@@ -52,7 +46,6 @@ const RegisterPage = () => {
   });
   //submit
   const onSubmitHandler = async (value) => {
-    if (!isValid) return;
     setIsLoading(true);
     try {
       console.log(value);
