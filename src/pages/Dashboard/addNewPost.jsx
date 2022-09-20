@@ -343,6 +343,7 @@ const AddNewPost = () => {
             theme="snow"
             modules={modules}
             value={contentPost}
+            scrollingContainer="html"
             onChange={setContentPost}
           />
         </div>

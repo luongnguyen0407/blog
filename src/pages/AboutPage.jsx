@@ -1,11 +1,7 @@
 import React from "react";
-
+import "react-quill/dist/quill.snow.css";
 const AboutPage = () => {
-  return (
-    <div>
-      <h1>About Page1</h1>
-    </div>
-  );
+  return <div className="w-full">About</div>;
 };
 
 export default AboutPage;
