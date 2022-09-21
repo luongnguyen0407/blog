@@ -1,49 +1,52 @@
-import Toggle from "../../components/dashboard/Toggle";
-import slugify from "slugify";
-import React, { useEffect, useMemo, useState } from "react";
-import Radio from "../../components/dashboard/Radio";
-import Label from "../../components/dashboard/Label";
-import InputBorder from "../../components/dashboard/InputBorder";
-import ImageUpload from "../../components/dashboard/ImageUpload";
-import Field from "../../components/dashboard/Field";
-import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
-import Button from "../../components/Button";
-import * as yup from "yup";
-import "react-quill/dist/quill.snow.css";
-import "./Post.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { useAuth } from "../../contexts/auth-context";
-import { toast } from "react-toastify";
-import { db } from "../../firebase-app/firebase-config";
-import ReactQuill, { Quill } from "react-quill";
-import ImageUploader from "quill-image-uploader";
 import {
-  addDoc,
   collection,
+  doc,
   getDocs,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import {
+  getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
-  getDownloadURL,
 } from "firebase/storage";
-import axios from "axios";
+import ImageUploader from "quill-image-uploader";
+import React, { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import ReactQuill, { Quill } from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import slugify from "slugify";
+import * as yup from "yup";
 import { postStatus } from "../../assets/Const";
-
+import Button from "../../components/Button";
+import DropDowHook from "../../components/dashboard/dropdow/DropDowHook";
+import Field from "../../components/dashboard/Field";
+import ImageUpload from "../../components/dashboard/ImageUpload";
+import InputBorder from "../../components/dashboard/InputBorder";
+import Label from "../../components/dashboard/Label";
+import Radio from "../../components/dashboard/Radio";
+import Toggle from "../../components/dashboard/Toggle";
+import { db } from "../../firebase-app/firebase-config";
+import "../../pages/Dashboard/Post.scss";
+import fetchData from "../../utils/getDoc";
 Quill.register("modules/imageUploader", ImageUploader);
-const AddNewPost = () => {
+
+const UpdatePost = () => {
   const [selectImageFile, setSelectImageFile] = useState();
   const [previewUrl, setPreviewUrl] = useState("");
+  const [selectCategory, setSelectCategory] = useState("");
   const [dataCategory, setDataCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { userInfor } = useAuth();
   const [contentPost, setContentPost] = useState("");
-
+  const [param] = useSearchParams();
+  const postId = param.get("id");
+  if (!postId) return;
   //validate
   const schema = yup.object({
     title: yup.string().required("Bạn phải nhập tiêu đề"),
@@ -69,24 +72,20 @@ const AddNewPost = () => {
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
-  const watchfileImg = watch("fileImg");
 
-  const handleSaveValue = async (value) => {
-    if (watchfileImg === undefined) {
-      toast.error("Bạn cần chọn ảnh");
-      return;
-    }
-    if (!contentPost) {
-      toast.error("Bạn cần điền nội dung bài viết");
-      return;
-    }
-    setIsLoading(true);
-    value.slug = slugify(value.slug || value.title, {
+  const handleSaveValue = async (values) => {
+    values.slug = slugify(values.slug || values.title, {
       lower: true,
       locale: "vi",
       remove: /[*+~.()'"!:@]/g,
     });
-    await handleUploadImg(value.fileImg, value);
+    toast.info("Đang cập nhật bài viết");
+    if (values.fileImg) {
+      await handleUploadImg(values.fileImg, values);
+    } else if (!values.fileImg) {
+      updatePost(values.imgUrl, values);
+    }
+    setIsLoading(true);
     // create post
   };
   const handleUploadImg = async (file, value) => {
@@ -98,22 +97,7 @@ const AddNewPost = () => {
     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
     uploadTask.on(
       "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            toast.info(`Đang tải ảnh lên ${Math.ceil(progress)}%`);
-            break;
-          default:
-            console.log("Loi");
-            break;
-        }
-      },
+      () => {},
       (error) => {
         switch (error.code) {
           case "storage/unauthorized":
@@ -129,22 +113,22 @@ const AddNewPost = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          addNewPostHandler(downloadURL, value);
+          updatePost(downloadURL, value);
         });
       }
     );
   };
-  const addNewPostHandler = async (imgUrl, value) => {
+  const updatePost = async (imgUrl, value) => {
     const { hot, slug, title } = value;
-    const postRef = collection(db, "posts");
-    await addDoc(postRef, {
+    const colRef = doc(db, "posts", postId);
+    await updateDoc(colRef, {
       category: {
         id: value.category.id,
         name: value.category.name,
       },
       useCreatePost: {
-        id: userInfor.uid,
-        name: userInfor.displayName,
+        id: value.useCreatePost.id,
+        name: value.useCreatePost.name,
       },
       title,
       hot,
@@ -154,16 +138,8 @@ const AddNewPost = () => {
       detailPost: contentPost,
       createAt: serverTimestamp(),
     });
-    toast.success("Tạo bài viết thành công");
+    toast.success("Cập nhật bài viết thành công");
     //reset field
-    reset({
-      title: "",
-      slug: "",
-      status: 2,
-      category: "",
-      hot: false,
-    });
-    handleDeleteImg();
     setIsLoading(false);
   };
   //get select image
@@ -219,6 +195,8 @@ const AddNewPost = () => {
   //delete img preview
   const handleDeleteImg = () => {
     setSelectImageFile(undefined);
+    setPreviewUrl("");
+    setValue("fileImg", "");
   };
   const modules = useMemo(
     () => ({
@@ -250,6 +228,19 @@ const AddNewPost = () => {
     }),
     []
   );
+  //get post
+  useEffect(() => {
+    if (!postId) return;
+    async function getData() {
+      const res = await fetchData("posts", postId);
+      reset(res);
+      setSelectCategory(res.category.name);
+      setContentPost(res.detailPost);
+      setPreviewUrl(res.imgUrl);
+    }
+    getData();
+  }, [postId, reset]);
+
   return (
     <div className="p-3">
       <form onSubmit={handleSubmit(handleSaveValue)} action="">
@@ -303,15 +294,6 @@ const AddNewPost = () => {
               </Radio>
             </div>
           </Field>
-          {/* <Field>
-            <Label htmlFor="author">Author</Label>
-            <InputBorder
-              id="author"
-              placeholder="Enter post author"
-              control={control}
-              name="author"
-            ></InputBorder>
-          </Field> */}
           <Field>
             <Label>Feature Post</Label>
             <Toggle
@@ -337,7 +319,13 @@ const AddNewPost = () => {
               name="category"
               setValue={setValue}
               data={dataCategory}
+              setSelect={setSelectCategory}
             ></DropDowHook>
+            {selectCategory && (
+              <span className="mt-2 inline-block p-3 text-sm font-medium text-green-600 rounded-lg bg-green-50">
+                {selectCategory}
+              </span>
+            )}
           </Field>
         </div>
         <div className="mt-6 entry-content">
@@ -362,4 +350,4 @@ const AddNewPost = () => {
   );
 };
 
-export default AddNewPost;
+export default UpdatePost;

@@ -27,6 +27,8 @@ const PostDetailsPage = () => {
   }, [slug]);
   if (!slug) return <PageNotFound />;
   if (!postDetail.title) return <PageNotFound />;
+  const date = new Date(postDetail?.createAt?.seconds * 1000);
+  const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <div className="p-24">
       <div>
@@ -37,8 +39,11 @@ const PostDetailsPage = () => {
               className="w-full max-w-[550px] h-[400px] rounded-3xl object-cover"
             />
             <div className="flex-1 post-info">
-              <div className="mb-6">Kiến thức</div>
+              <div className="mb-6 px-3 rounded-lg bg-pink-200 inline-block text-white">
+                {postDetail.category.name}
+              </div>
               <Heading className="font-bold">{postDetail.title}</Heading>
+              <span>{createDate}</span>
               <div></div>
             </div>
           </div>
@@ -50,7 +55,7 @@ const PostDetailsPage = () => {
               }}
             ></div>
             <div className="author mt-10 mb-20 flex rounded-3xl bg-blue-200 items-center p-4 gap-x-4">
-              <Author author={postDetail.useCreatePost} />
+              <Author author={postDetail.useCreatePost.id} />
             </div>
           </div>
           <div className="post-related">

@@ -101,7 +101,7 @@ const Header = () => {
             ))}
             <NavLink
               className="activeAdd bg-purple-200 rounded-lg"
-              to={"/dashboard/addPost"}
+              to={"/dashboard/post"}
             >
               <div className="addPost flex py-10 justify-center cursor-pointer  items-center ">
                 <div className="rounded-full bg-white p-2  text-gray-400 font-bold">

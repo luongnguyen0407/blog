@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { useWatch } from "react-hook-form";
 import useOnClickOutside from "../../../hooks/useClickOutSide";
-const DropDowHook = ({ name, setValue, control, data }) => {
+const DropDowHook = ({
+  name,
+  setValue,
+  control,
+  data,
+  setSelect = () => {},
+}) => {
   const { show, setShow, nodeRef } = useOnClickOutside();
-  const [categorySelect, setCategorySelect] = useState("Select you Category");
+  const [categorySelect, setCategorySelect] = useState("Select post Category");
   useWatch({
     control,
     name,
     defaultValue: "",
   });
   const handleSetValue = (e) => {
-    setValue(name, e.target.dataset.value);
+    setValue(name, { id: e.target.dataset.value, name: e.target.textContent });
     setCategorySelect(e.target.textContent);
+    setSelect(e.target.textContent);
     setShow(false);
   };
 

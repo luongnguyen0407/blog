@@ -1,21 +1,23 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
+import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { AuthProvider } from "./contexts/auth-context";
-const PostDetailsPage = lazy(() => import("./pages/PostDetailsPage"));
+const UpdatePost = lazy(() => import("./modules/category/UpdatePost"));
 const UpdateUser = lazy(() => import("./modules/user/UpdateUser"));
-const AddUser = lazy(() => import("./modules/user/AddUser"));
-const ManageUser = lazy(() => import("./modules/user/ManageUser"));
-const PageNotFound = lazy(() => import("./pages/PageNotFound "));
-const Dashboard = lazy(() => import("./layouts/Dashboard"));
-const MainLayout = lazy(() => import("./layouts/MainLayout"));
-const Category = lazy(() => import("./modules/category/Category"));
-const AddCategory = lazy(() => import("./modules/category/AddCategory"));
 const UpdateCategory = lazy(() => import("./modules/category/UpdateCategory"));
-const AddNewPost = lazy(() => import("./pages/Dashboard/AddNewPost"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const PostManage = lazy(() => import("./modules/category/PostManage"));
+const PostDetailsPage = lazy(() => import("./pages/PostDetailsPage"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound "));
+const ManageUser = lazy(() => import("./modules/user/ManageUser"));
+const MainLayout = lazy(() => import("./layouts/MainLayout"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
+const Dashboard = lazy(() => import("./layouts/Dashboard"));
+const Category = lazy(() => import("./modules/category/Category"));
+const AddUser = lazy(() => import("./modules/user/AddUser"));
+const AddNewPost = lazy(() => import("./pages/Dashboard/AddNewPost"));
+const AddCategory = lazy(() => import("./modules/category/AddCategory"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 function App() {
   return (
@@ -34,8 +36,16 @@ function App() {
                 ></Route>
                 <Route element={<Dashboard></Dashboard>}>
                   <Route
-                    path="dashboard/addPost"
+                    path="dashboard/post/addPost"
                     element={<AddNewPost></AddNewPost>}
+                  ></Route>
+                  <Route
+                    path="dashboard/post"
+                    element={<PostManage></PostManage>}
+                  ></Route>
+                  <Route
+                    path="dashboard/post/updatepost"
+                    element={<UpdatePost></UpdatePost>}
                   ></Route>
                   <Route
                     path="dashboard/category"

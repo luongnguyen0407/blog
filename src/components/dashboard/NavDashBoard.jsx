@@ -8,9 +8,9 @@ import {
 } from "react-icons/ai";
 const LIST_NAV = [
   {
-    title: "Add Post",
+    title: "Post",
     icon: <AiOutlineFileAdd />,
-    path: "/dashboard/addPost",
+    path: "/dashboard/post",
   },
   {
     title: "Category",
