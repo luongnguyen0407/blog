@@ -45,7 +45,7 @@ const DropDowHook = ({
         </svg>
       </div>
       <div
-        className={`absolute left-0 w-full ${
+        className={`absolute bg-white z-50 left-0 w-full ${
           show ? "" : "opacity-0 invisible"
         }`}
       >

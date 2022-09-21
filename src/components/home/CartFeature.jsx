@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import React from "react";
+import { Link } from "react-router-dom";
 import Heading from "../Heading";
 import Tag from "../Tag";
 import DatePost from "./DatePost";
-import PropTypes from "prop-types";
-import fetchData from "../../utils/getDoc";
-import slugify from "slugify";
-import { Link } from "react-router-dom";
 const CardFeature = ({ data }) => {
   if (!data || !data.id) return;
   // return;

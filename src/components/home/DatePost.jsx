@@ -6,9 +6,10 @@ const DatePost = ({
   author = "",
   date = "",
   to = "/",
+  className = "",
 }) => {
   return (
-    <div className={`flex text-sm font-bold  ${color}`}>
+    <div className={`flex text-sm font-bold  ${color} ${className}`}>
       <div>{date}-</div>
       <div>
         <Link to={to}>{author}</Link>

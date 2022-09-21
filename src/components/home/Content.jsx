@@ -18,8 +18,10 @@ const Content = () => {
           <Newest></Newest>
         </ErrorBoundary>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <HeadingFe>Similar Post</HeadingFe>
-          <SimilarPost></SimilarPost>
+          <div className="mt-10">
+            <HeadingFe>Similar Post</HeadingFe>
+            <SimilarPost></SimilarPost>
+          </div>
         </ErrorBoundary>
       </div>
     </div>

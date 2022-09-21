@@ -4,22 +4,28 @@ import Tag from "../Tag";
 import PropTypes from "prop-types";
 import DatePost from "./DatePost";
 
-const CartRow = ({ tag, heading }) => {
+const CartRow = ({ post }) => {
+  const date = new Date(post?.createAt?.seconds * 1000);
+  const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
     <div className="flex gap-3 cursor-pointer py-3 border-b border-gray-300">
       <div className="w-2/6 rounded-lg overflow-hidden ">
-        <img
-          className="object-cover"
-          src="https://images.unsplash.com/photo-1617850687395-620757feb1f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
-          alt=""
-        />
+        <img className="object-cover w-full h-full" src={post.imgUrl} alt="" />
       </div>
       <div className="w-4/6">
-        <Tag>{tag}</Tag>
-        <Heading size="text-base" className="line-clamp-2">
-          {heading}
+        <Tag>{post.category.name}</Tag>
+        <Heading
+          to={`/post/${post.slug}`}
+          size="text-base"
+          className="line-clamp-2"
+        >
+          {post.title}
         </Heading>
-        <DatePost color="text-gray-400"></DatePost>
+        <DatePost
+          color="text-gray-400"
+          date={createDate}
+          author={post.useCreatePost.name}
+        />
       </div>
     </div>
   );

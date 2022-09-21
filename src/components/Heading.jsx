@@ -11,7 +11,7 @@ const Heading = ({
 }) => {
   return (
     <h2
-      className={`font-semibold ${size} ${className}  my-2 ${
+      className={`font-semibold line-clamp-3 ${size} ${className}  my-2 ${
         center ? "text-center" : ""
       }`}
     >

@@ -4,21 +4,28 @@ import Tag from "../Tag";
 import DatePost from "./DatePost";
 import PropTypes from "prop-types";
 
-const CartCol = ({ className }) => {
+const CartCol = ({ className, data }) => {
+  const date = new Date(data?.createAt?.seconds * 1000);
+  const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
-    <div className="w-full cursor-pointer">
+    <div className="w-full cursor-pointer pb-5 relative min-h-[390px]">
       <div className="w-full rounded-lg overflow-hidden mb-3">
         <img
-          className="w-full object-cover"
-          src="https://images.unsplash.com/photo-1603373768162-050da3780406?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+          className="w-full object-cover min-h-[200px] block"
+          src={data.imgUrl}
           alt=""
         />
       </div>
-      <Tag bg="bg-purple-200">Kiến thức</Tag>
-      <Heading className={className}>
-        Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
+      <Tag bg="bg-purple-200">{data.category.name}</Tag>
+      <Heading to={`/post/${data.slug}`} className={className}>
+        {data.title}
       </Heading>
-      <DatePost color="text-gray-400"></DatePost>
+      <DatePost
+        className="absolute bottom-0"
+        color="text-gray-400"
+        date={createDate}
+        author={data.useCreatePost.name}
+      />
     </div>
   );
 };

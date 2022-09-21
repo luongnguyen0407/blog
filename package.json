@@ -27,6 +27,7 @@
     "sass": "^1.54.9",
     "slugify": "^1.6.5",
     "sweetalert2": "^11.4.29",
+    "swiper": "^8.4.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

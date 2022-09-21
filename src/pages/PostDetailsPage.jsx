@@ -1,14 +1,16 @@
 import PageNotFound from "./PageNotFound ";
 import Heading from "../components/Heading";
 import Author from "../components/dashboard/Author";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../firebase-app/firebase-config";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import "../pages/Dashboard/Post.scss";
+import SimilarPost from "../components/home/SimilarPost";
 const PostDetailsPage = () => {
   const { slug } = useParams();
   const [postDetail, setPostDetail] = useState({});
+  const location = useLocation();
   useEffect(() => {
     async function fetchData() {
       if (!slug) return;
@@ -25,12 +27,17 @@ const PostDetailsPage = () => {
     }
     fetchData();
   }, [slug]);
+  useEffect(() => {
+    if (!location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
   if (!slug) return <PageNotFound />;
   if (!postDetail.title) return <PageNotFound />;
   const date = new Date(postDetail?.createAt?.seconds * 1000);
   const createDate = new Date(date).toLocaleDateString("vi-VI");
   return (
-    <div className="p-24">
+    <div className="p-10 w-4/5 flex-1">
       <div>
         <div className="container">
           <div className="flex justify-between items-center gap-10 mb-10">
@@ -58,11 +65,11 @@ const PostDetailsPage = () => {
               <Author author={postDetail.useCreatePost.id} />
             </div>
           </div>
-          <div className="post-related">
-            <Heading>Bài viết liên quan</Heading>
-            <div className="grid-layout grid-layout--primary"></div>
-          </div>
         </div>
+      </div>
+      <div className="post-related">
+        <Heading>Bài viết liên quan</Heading>
+        <SimilarPost></SimilarPost>
       </div>
     </div>
   );

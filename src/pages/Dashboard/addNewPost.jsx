@@ -163,6 +163,7 @@ const AddNewPost = () => {
       category: "",
       hot: false,
     });
+    setContentPost("");
     handleDeleteImg();
     setIsLoading(false);
   };

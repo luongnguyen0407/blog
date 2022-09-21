@@ -6,7 +6,7 @@ import ErrorFallback from "../components/Error/ErrorFallback";
 
 const HomePage = () => {
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-4/5 flex-1">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Banner></Banner>
       </ErrorBoundary>
