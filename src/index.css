@@ -17,8 +17,10 @@
     color: #232323;
   }
 }
-.reHidden .isHidden {
-  display: none;
+@media only screen and (min-width: 1023px) {
+  .reHidden .isHidden {
+    display: none;
+  }
 }
 .reHidden .itemShowCenter {
   display: flex;
@@ -71,4 +73,10 @@
 }
 .tableCategory td {
   padding: 15px 30px;
+}
+
+@media screen and (max-width: 830px) {
+  .tableCategory td {
+    padding: 10px 20px;
+  }
 }

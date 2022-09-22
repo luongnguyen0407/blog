@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 const Heading = ({
   children,
   center,
-  size = "text-3xl",
+  size = "text-xl",
   className = "",
   to = "/",
 }) => {
   return (
     <h2
-      className={`font-semibold line-clamp-3 ${size} ${className}  my-2 ${
+      className={`font-semibold line-clamp-3 ${className} ${size} my-2 ${
         center ? "text-center" : ""
       }`}
     >

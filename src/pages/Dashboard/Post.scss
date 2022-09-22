@@ -65,3 +65,30 @@
     z-index: 10;
   }
 }
+
+//slider similar
+.similarSlider .swiper-button-next::after,
+.similarSlider .swiper-button-prev::after {
+  font-size: 1rem;
+  color: white;
+}
+.similarSlider .swiper-button-prev,
+.similarSlider .swiper-button-next {
+  right: 0;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: lightblue;
+  opacity: 0;
+  transition: opacity 0.25s linear;
+}
+.similarSlider .swiper-button-prev {
+  left: 0;
+}
+.similarSlider:hover .swiper-button-next,
+.similarSlider:hover .swiper-button-prev {
+  opacity: 1;
+}

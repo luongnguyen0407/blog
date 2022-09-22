@@ -1,7 +1,8 @@
-import LoadingPage from "./components/common/LoadingPage";
-import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import LoadingPage from "./components/common/LoadingPage";
 import { AuthProvider } from "./contexts/auth-context";
+const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 const UpdatePost = lazy(() => import("./modules/category/UpdatePost"));
 const UpdateUser = lazy(() => import("./modules/user/UpdateUser"));
 const UpdateCategory = lazy(() => import("./modules/category/UpdateCategory"));
@@ -18,7 +19,6 @@ const Category = lazy(() => import("./modules/category/Category"));
 const AddUser = lazy(() => import("./modules/user/AddUser"));
 const AddNewPost = lazy(() => import("./pages/Dashboard/AddNewPost"));
 const AddCategory = lazy(() => import("./modules/category/AddCategory"));
-const AboutPage = lazy(() => import("./pages/AboutPage"));
 function App() {
   return (
     <AuthProvider>
@@ -26,58 +26,46 @@ function App() {
         <Suspense fallback={<LoadingPage />}>
           <Routes>
             <Route path="/">
-              <Route element={<MainLayout></MainLayout>}>
-                <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
-                <Route index element={<HomePage></HomePage>}></Route>
-                <Route path="about" element={<AboutPage></AboutPage>}></Route>
-                <Route
-                  path="post/:slug"
-                  element={<PostDetailsPage></PostDetailsPage>}
-                ></Route>
-                <Route element={<Dashboard></Dashboard>}>
+              <Route element={<MainLayout />}>
+                <Route path="*" element={<PageNotFound />}></Route>
+                <Route index element={<HomePage />}></Route>
+                <Route path="updateprofile" element={<UpdateProfile />}></Route>
+                <Route path="post/:slug" element={<PostDetailsPage />}></Route>
+                <Route element={<Dashboard />}>
                   <Route
                     path="dashboard/post/addPost"
-                    element={<AddNewPost></AddNewPost>}
+                    element={<AddNewPost />}
                   ></Route>
-                  <Route
-                    path="dashboard/post"
-                    element={<PostManage></PostManage>}
-                  ></Route>
+                  <Route path="dashboard/post" element={<PostManage />}></Route>
                   <Route
                     path="dashboard/post/updatepost"
-                    element={<UpdatePost></UpdatePost>}
+                    element={<UpdatePost />}
                   ></Route>
                   <Route
                     path="dashboard/category"
-                    element={<Category></Category>}
+                    element={<Category />}
                   ></Route>
                   <Route
                     path="dashboard/category/addcategory"
-                    element={<AddCategory></AddCategory>}
+                    element={<AddCategory />}
                   ></Route>
                   <Route
                     path="dashboard/category/updatecategory"
-                    element={<UpdateCategory></UpdateCategory>}
+                    element={<UpdateCategory />}
                   ></Route>
-                  <Route
-                    path="dashboard/user"
-                    element={<ManageUser></ManageUser>}
-                  ></Route>
+                  <Route path="dashboard/user" element={<ManageUser />}></Route>
                   <Route
                     path="dashboard/user/useraddnew"
-                    element={<AddUser></AddUser>}
+                    element={<AddUser />}
                   ></Route>
                   <Route
                     path="dashboard/user/update"
-                    element={<UpdateUser></UpdateUser>}
+                    element={<UpdateUser />}
                   ></Route>
                 </Route>
               </Route>
-              <Route
-                path="register"
-                element={<RegisterPage></RegisterPage>}
-              ></Route>
-              <Route path="login" element={<LoginPage></LoginPage>}></Route>
+              <Route path="register" element={<RegisterPage />}></Route>
+              <Route path="login" element={<LoginPage />}></Route>
             </Route>
           </Routes>
         </Suspense>

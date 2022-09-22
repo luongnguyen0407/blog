@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../components/home/Header";
+import SideBar from "../components/home/SideBar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
 const MainLayout = () => {
@@ -14,7 +14,7 @@ const MainLayout = () => {
   return (
     <>
       <div className="flex">
-        <Header></Header>
+        <SideBar></SideBar>
         <Outlet></Outlet>
       </div>
     </>

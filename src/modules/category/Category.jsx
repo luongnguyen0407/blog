@@ -78,8 +78,8 @@ const Category = () => {
           onChange={searchHandler}
         />
       </div>
-      <div className="table w-full mt-4">
-        <table className="w-full tableCategory">
+      <div className=" lg:w-full mt-4 overflow-x-auto">
+        <table className="w-full tableCategory table">
           <thead>
             <tr>
               <th>Id</th>

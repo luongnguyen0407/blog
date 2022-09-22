@@ -39,17 +39,19 @@ const PostDetailsPage = () => {
   return (
     <div className="p-10 w-4/5 flex-1">
       <div>
-        <div className="container">
-          <div className="flex justify-between items-center gap-10 mb-10">
+        <div className="container mx-auto">
+          <div className="grid lg:grid-cols-2 justify-between items-center gap-10 mb-10">
             <img
               src={postDetail.imgUrl}
-              className="w-full max-w-[550px] h-[400px] rounded-3xl object-cover"
+              className="w-full max-w-[550px] h-[400px] rounded-3xl object-cover mx-auto"
             />
             <div className="flex-1 post-info">
               <div className="mb-6 px-3 rounded-lg bg-pink-200 inline-block text-white">
                 {postDetail.category.name}
               </div>
-              <Heading className="font-bold">{postDetail.title}</Heading>
+              <Heading size="md:text-xl lg:text-3xl" className="font-bold">
+                {postDetail.title}
+              </Heading>
               <span>{createDate}</span>
               <div></div>
             </div>
@@ -61,7 +63,7 @@ const PostDetailsPage = () => {
                 __html: postDetail.detailPost || "",
               }}
             ></div>
-            <div className="author mt-10 mb-20 flex rounded-3xl bg-blue-200 items-center p-4 gap-x-4">
+            <div className="author mt-10 mb-20  sm:flex rounded-3xl bg-blue-200 items-center p-4 gap-x-4">
               <Author author={postDetail.useCreatePost.id} />
             </div>
           </div>

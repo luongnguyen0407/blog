@@ -30,7 +30,7 @@ const Newest = () => {
   if (newest.length <= 0) return null;
   const [first, ...other] = newest;
   return (
-    <div className="grid grid-cols-2 gap-10">
+    <div className="grid md:grid-cols-2 gap-10">
       <CartCol data={first}></CartCol>
       <div className="p-6 bg-purple-100 rounded-lg flex flex-col justify-around">
         {other.length > 0 &&

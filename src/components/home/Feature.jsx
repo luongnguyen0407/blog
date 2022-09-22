@@ -1,7 +1,9 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { db } from "../../firebase-app/firebase-config";
 import CardFeature from "./CartFeature";
+import "swiper/css";
 
 const Feature = () => {
   const [postHot, setPostHot] = useState();
@@ -27,12 +29,31 @@ const Feature = () => {
     getData();
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="">
       {!postHot && <div>loading</div>}
-      {postHot &&
-        postHot.map((post) => (
-          <CardFeature key={post.id} data={post}></CardFeature>
-        ))}
+      <Swiper
+        spaceBetween={30}
+        slidesPerView={2}
+        breakpoints={{
+          // when window width is >= 640px
+          1440: {
+            slidesPerView: 4,
+          },
+          970: {
+            slidesPerView: 3,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+        }}
+      >
+        {postHot &&
+          postHot.map((post) => (
+            <SwiperSlide key={post.id}>
+              <CardFeature data={post}></CardFeature>
+            </SwiperSlide>
+          ))}
+      </Swiper>
     </div>
   );
 };

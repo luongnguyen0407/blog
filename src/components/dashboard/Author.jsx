@@ -15,7 +15,7 @@ const Author = ({ author }) => {
   if (!author || !data?.username) return;
   return (
     <>
-      <div className="author-image w-[200px] max-h-[200px] flex-shrink-0 rounded-lg">
+      <div className="author-image w-[200px] max-h-[200px] flex-shrink-0 rounded-lg mx-auto">
         <img className="rounded-lg" src={data?.avatar} alt="" />
       </div>
       <div className="author-content">

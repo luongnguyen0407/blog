@@ -5,6 +5,9 @@ import { db } from "../../firebase-app/firebase-config";
 import CartCol from "./CartCol";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "../../pages/Dashboard/Post.scss";
+import { Navigation } from "swiper";
+import "swiper/css/navigation";
 const SimilarPost = () => {
   const [similarPost, setSimilarPost] = useState([]);
   useEffect(() => {
@@ -23,16 +26,36 @@ const SimilarPost = () => {
   }, []);
   if (similarPost.length <= 0) return null;
   return (
-    <div className="mt-10">
+    <div className="mt-10 similarSlider">
       <Swiper
         spaceBetween={30}
-        slidesPerView={4}
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
+        slidesPerView={2}
+        modules={[Navigation]}
+        loop={true}
+        navigation
+        breakpoints={{
+          // when window width is >= 640px
+          1440: {
+            slidesPerView: 5,
+          },
+          970: {
+            slidesPerView: 4,
+          },
+          768: {
+            slidesPerView: 3,
+          },
+          720: {
+            slidesPerView: 2,
+          },
+        }}
       >
         {similarPost.map((item) => (
           <SwiperSlide key={item.id}>
-            <CartCol data={item} className="text-lg"></CartCol>
+            <CartCol
+              fixHeight="max-h-[200px]"
+              data={item}
+              className="text-lg"
+            ></CartCol>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import Button from "../../components/Button";
-import Field from "../../components/dashboard/Field";
-import InputBorder from "../../components/dashboard/InputBorder";
-import Label from "../../components/dashboard/Label";
-import Radio from "../../components/dashboard/Radio";
-import Heading from "../../components/Heading";
-import { roleUser, statusUser } from "../../utils/Const";
-import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import ImageUpload from "../../components/dashboard/ImageUpload";
+import { updateProfile } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import {
+  deleteObject,
+  getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
 } from "firebase/storage";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase-app/firebase-config";
-import { useSearchParams } from "react-router-dom";
-import fetchData from "../../utils/getDoc";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import * as yup from "yup";
+import Button from "../components/Button";
+import Field from "../components/dashboard/Field";
+import ImageUpload from "../components/dashboard/ImageUpload";
+import InputBorder from "../components/dashboard/InputBorder";
+import Label from "../components/dashboard/Label";
+import Heading from "../components/Heading";
+import { useAuth } from "../contexts/auth-context";
+import { auth, db } from "../firebase-app/firebase-config";
+import fetchData from "../utils/getDoc";
+import PageNotFound from "./PageNotFound ";
 
-const UpdateUser = () => {
-  const [param] = useSearchParams();
-  const userId = param.get("id");
+const UpdateProfile = () => {
   const [selectAvatarFile, setSelectAvatarFile] = useState();
   const [previewUrl, setPreviewUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { userInfor } = useAuth();
   const schema = yup.object({
     username: yup.string().required("Bạn cần nhập username"),
     email: yup
@@ -40,8 +39,6 @@ const UpdateUser = () => {
       .min(8, "password quá ngắn")
       .max(16, "password quá dài"),
     address: yup.string().required("Bạn phải nhập địa chỉ user"),
-    role: yup.number().required("Bạn cần chọn quyền của user"),
-    status: yup.number().required("Bạn cần chọn trạng thái của user"),
   });
   const {
     handleSubmit,
@@ -62,7 +59,7 @@ const UpdateUser = () => {
     setIsLoading(true);
     if (typeof values.fileImg === "object") {
       await handleUploadImg(values.fileImg, values);
-      const imageRegex = /%2F(\S+)\?/gm.exec(values.avatar);
+      const imageRegex = /%2F(\S+)\?/gm.exec(value.avatar);
       const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
       handleDeleteImgDatabase(imageName);
     } else if (typeof values.fileImg === "string") {
@@ -73,11 +70,7 @@ const UpdateUser = () => {
     if (nameImg) {
       const storage = getStorage();
       const desertRef = ref(storage, "avatar/" + nameImg);
-      deleteObject(desertRef)
-        .then(() => console.log("delete done"))
-        .catch((error) => {
-          console.log(error);
-        });
+      deleteObject(desertRef).then(() => console.log("delete done"));
     }
   };
   const handleUploadImg = async (file, value) => {
@@ -130,17 +123,21 @@ const UpdateUser = () => {
   };
   const updateUser = async (avatarUrl, value) => {
     if (!isValid || !avatarUrl) return;
-    const { email, password, role, status, username } = value;
+
+    const { email, password, username, address } = value;
     const imgName = value.fileImg.name;
     try {
-      const colRef = doc(db, "users", userId);
+      const colRef = doc(db, "users", userInfor.uid);
       await updateDoc(colRef, {
         email,
         password,
-        role,
-        status,
         username,
+        address,
         avatar: avatarUrl,
+      });
+      await updateProfile(auth.currentUser, {
+        displayName: username,
+        photoURL: avatarUrl,
       });
       toast.success("Update user information successfully!");
     } catch (error) {
@@ -191,30 +188,28 @@ const UpdateUser = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userInfor.uid) return;
     async function getData() {
-      const res = await fetchData("users", userId);
-      console.log(res);
+      const res = await fetchData("users", userInfor.uid);
       reset(res);
       setValue("fileImg", res.avatar);
       setPreviewUrl(res.avatar);
     }
     getData();
-  }, [userId]);
+  }, [!userInfor.uid]);
 
   //delete img preview
   const handleDeleteImg = () => {
     setSelectAvatarFile(undefined);
     setPreviewUrl(undefined);
   };
-  const watchStatus = watch("status");
-  const watchRole = watch("role");
   const watchfileImg = watch("fileImg");
+  if (!userInfor.uid) return <PageNotFound />;
   return (
-    <div className="p-6">
+    <div className="p-6 flex-1">
       <div className="mb-2">
-        <Heading>Update User</Heading>
-        <p className="text-gray-300 italic">Update user</p>
+        <Heading>Update Profile</Heading>
+        <p className="text-gray-300 italic">Update profile</p>
       </div>
       <form action="" onSubmit={handleSubmit(handleSubmitForm)}>
         <div className="flex justify-center mb-5">
@@ -270,77 +265,18 @@ const UpdateUser = () => {
             ></InputBorder>
           </Field>
         </div>
-        <div className="flex gap-5">
-          <Field>
-            <Label htmlFor="status">Status</Label>
-            <div className="flex gap-4">
-              <Radio
-                control={control}
-                name="status"
-                checked={Number(watchStatus) === statusUser.Active}
-                value={statusUser.Active}
-              >
-                Active
-              </Radio>
-              <Radio
-                control={control}
-                name="status"
-                checked={Number(watchStatus) === statusUser.Pending}
-                value={statusUser.Pending}
-              >
-                Pending
-              </Radio>
-              <Radio
-                control={control}
-                name="status"
-                checked={Number(watchStatus) === statusUser.Ban}
-                value={statusUser.Ban}
-              >
-                Banned
-              </Radio>
-            </div>
-          </Field>
-          <Field>
-            <Label htmlFor="role">Role</Label>
-            <div className="flex gap-4">
-              <Radio
-                control={control}
-                name="role"
-                checked={Number(watchRole) === roleUser.Admin}
-                value={roleUser.Admin}
-              >
-                Admin
-              </Radio>
-              <Radio
-                control={control}
-                name="role"
-                checked={Number(watchRole) === roleUser.Mod}
-                value={roleUser.Mod}
-              >
-                Mod
-              </Radio>
-              <Radio
-                control={control}
-                name="role"
-                checked={Number(watchRole) === roleUser.User}
-                value={roleUser.User}
-              >
-                User
-              </Radio>
-            </div>
-          </Field>
-        </div>
+        <div className="flex gap-5"></div>
         <Button
           type="submit"
           className="bg-blue-400 max-w-[200px] m-auto flex items-center mt-4"
           disabled={isLoading}
           loading={isLoading}
         >
-          Add New User
+          Update Profile
         </Button>
       </form>
     </div>
   );
 };
 
-export default UpdateUser;
+export default UpdateProfile;
