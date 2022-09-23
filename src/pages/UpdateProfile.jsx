@@ -224,7 +224,7 @@ const UpdateProfile = () => {
             ></ImageUpload>
           </Field>
         </div>
-        <div className="flex gap-5">
+        <div className="sm:flex gap-5">
           <Field>
             <Label htmlFor="username">User Name</Label>
             <InputBorder
@@ -244,7 +244,7 @@ const UpdateProfile = () => {
             ></InputBorder>
           </Field>
         </div>
-        <div className="flex gap-5 my-5">
+        <div className="sm:flex gap-5 my-5">
           <Field>
             <Label htmlFor="password">PassWord</Label>
             <InputBorder

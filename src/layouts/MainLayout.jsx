@@ -6,11 +6,11 @@ import { useAuth } from "../contexts/auth-context";
 const MainLayout = () => {
   const navigate = useNavigate();
   const { userInfor } = useAuth();
-  useEffect(() => {
-    if (!userInfor) {
-      navigate("/login");
-    }
-  }, [userInfor]);
+  // useEffect(() => {
+  //   if (!userInfor) {
+  //     navigate("/login");
+  //   }
+  // }, [userInfor]);
   return (
     <>
       <div className="flex">

@@ -76,7 +76,7 @@ const AddCategory = () => {
         <p>Add new category</p>
       </div>
       <form onSubmit={handleSubmit(submitHandler)} action="">
-        <div className="flex gap-5 items-center">
+        <div className="sm:flex sm:gap-5 items-center">
           <Field>
             <Label htmlFor="name">Name</Label>
             <InputBorder

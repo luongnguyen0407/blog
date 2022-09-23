@@ -254,7 +254,7 @@ const AddNewPost = () => {
   return (
     <div className="p-3">
       <form onSubmit={handleSubmit(handleSaveValue)} action="">
-        <div className="flex gap-5">
+        <div className="lg:flex gap-5 ">
           <Field>
             <Label htmlFor="title">Title</Label>
             <InputBorder
@@ -274,7 +274,7 @@ const AddNewPost = () => {
             ></InputBorder>
           </Field>
         </div>
-        <div className="flex gap-5 items-center my-4">
+        <div className="sm:flex sm:gap-5 items-center sm:my-4">
           <Field>
             <Label htmlFor="status">Status</Label>
             <div className="flex gap-4">
@@ -304,15 +304,6 @@ const AddNewPost = () => {
               </Radio>
             </div>
           </Field>
-          {/* <Field>
-            <Label htmlFor="author">Author</Label>
-            <InputBorder
-              id="author"
-              placeholder="Enter post author"
-              control={control}
-              name="author"
-            ></InputBorder>
-          </Field> */}
           <Field>
             <Label>Feature Post</Label>
             <Toggle
@@ -322,7 +313,7 @@ const AddNewPost = () => {
           </Field>
         </div>
         <div></div>
-        <div className="flex gap-5">
+        <div className="sm:flex gap-5">
           <Field>
             <Label htmlFor="">Image</Label>
             <ImageUpload

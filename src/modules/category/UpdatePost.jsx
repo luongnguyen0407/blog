@@ -244,7 +244,7 @@ const UpdatePost = () => {
   return (
     <div className="p-3">
       <form onSubmit={handleSubmit(handleSaveValue)} action="">
-        <div className="flex gap-5">
+        <div className="sm:flex sm:gap-5">
           <Field>
             <Label htmlFor="title">Title</Label>
             <InputBorder
@@ -264,7 +264,7 @@ const UpdatePost = () => {
             ></InputBorder>
           </Field>
         </div>
-        <div className="flex gap-5 items-center my-4">
+        <div className="sm:flex sm:gap-5 sm:items-center my-4">
           <Field>
             <Label htmlFor="status">Status</Label>
             <div className="flex gap-4">
@@ -303,7 +303,7 @@ const UpdatePost = () => {
           </Field>
         </div>
         <div></div>
-        <div className="flex gap-5">
+        <div className="sm:flex gap-5">
           <Field>
             <Label htmlFor="">Image</Label>
             <ImageUpload

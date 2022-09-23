@@ -82,7 +82,7 @@ const UpdateCategory = () => {
   return (
     <div className="p-4">
       <form onSubmit={handleSubmit(updateHandler)} action="">
-        <div className="flex gap-5 items-center">
+        <div className="sm:flex sm:gap-5 sm:items-center">
           <Field>
             <Label htmlFor="name">Name</Label>
             <InputBorder

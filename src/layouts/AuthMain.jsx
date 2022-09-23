@@ -14,12 +14,12 @@ const AuthMain = ({ children }) => {
     }
   }, [userInfor]);
   return (
-    <div className="bg-center bg-hero bg-cover min-h-screen flex items-center justify-center rounded-lg">
-      <div className=" bg-white p-3 w-3/5 lg:w-2/5 rounded-lg flex flex-col items-center">
+    <div className="bg-center bg-hero bg-cover min-h-screen flex items-center justify-center rounded-lg shadow-lg">
+      <div className=" bg-white p-3 w-4/5 sm:w-3/5 lg:w-2/5 rounded-lg flex flex-col items-center">
         <Link to={"/"}>
           <img
             srcSet="/logo.png 2x"
-            className="max-w-[100px] max-h-[100px]"
+            className="sm:max-w-[100px] sm:max-h-[100px] max-w-[60px] max-h-[60px]"
             alt=""
           />
         </Link>
