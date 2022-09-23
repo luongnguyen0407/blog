@@ -15,7 +15,7 @@ const CardFeature = ({ data }) => {
       <div className="absolute overlay inset-0 select-none"></div>
       <img className="w-full h-full object-cover" src={data.imgUrl} alt="" />
       <div className="absolute top-0 z-20 p-2 left-0 w-full items-center">
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-x-2 sm:gap-x-0">
           <Tag to={"category/" + data.categoryId?.id || "doi-song"}>
             {data.categoryId?.name || "Đời sống"}
           </Tag>

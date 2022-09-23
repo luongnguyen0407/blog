@@ -21,11 +21,14 @@ import {
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase-app/firebase-config";
+import { useAuth } from "../../contexts/auth-context";
 
 const AddUser = () => {
   const [selectAvatarFile, setSelectAvatarFile] = useState();
   const [previewUrl, setPreviewUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { userInfor } = useAuth();
+
   const schema = yup.object({
     username: yup.string().required("Bạn cần nhập username"),
     email: yup
@@ -59,6 +62,10 @@ const AddUser = () => {
     },
   });
   const handleSubmitForm = async (values) => {
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
     if (watchfileImg === undefined) {
       toast.error("Bạn cần chọn ảnh");
       return;

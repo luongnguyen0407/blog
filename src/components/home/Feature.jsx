@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { db } from "../../firebase-app/firebase-config";
 import CardFeature from "./CartFeature";
 import "swiper/css";
+import CardSkeleton from "../common/CardSkeleton";
 
 const Feature = () => {
   const [postHot, setPostHot] = useState();
@@ -30,7 +31,7 @@ const Feature = () => {
   }, []);
   return (
     <div className="">
-      {!postHot && <div>loading</div>}
+      {}
       <Swiper
         spaceBetween={30}
         slidesPerView={2}
@@ -47,6 +48,19 @@ const Feature = () => {
           },
         }}
       >
+        {!postHot && (
+          <>
+            <SwiperSlide>
+              <CardSkeleton />
+            </SwiperSlide>
+            <SwiperSlide>
+              <CardSkeleton />
+            </SwiperSlide>
+            <SwiperSlide>
+              <CardSkeleton />
+            </SwiperSlide>
+          </>
+        )}
         {postHot &&
           postHot.map((post) => (
             <SwiperSlide key={post.id}>

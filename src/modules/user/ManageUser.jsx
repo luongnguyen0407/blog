@@ -9,7 +9,9 @@ import {
 import { debounce } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useAuth } from "../../contexts/auth-context";
 import { db } from "../../firebase-app/firebase-config";
 import { roleUser, statusUser } from "../../utils/Const";
 import ActionDelete from "../category/iconAction/ActionDelete";
@@ -18,6 +20,7 @@ import ActionUpdate from "../category/iconAction/ActionUpdate";
 const ManageUser = () => {
   const [listUser, setListUser] = useState();
   const [filter, setFilter] = useState("");
+  const { userInfor } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     const colRef = collection(db, "users");
@@ -76,8 +79,13 @@ const ManageUser = () => {
     }
   };
   if (!listUser) return;
+  /////
   const handleDeleteUser = async (user) => {
     if (!user) return;
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
     const colRef = doc(db, "users", user.id);
     Swal.fire({
       title: "Are you sure?",
@@ -94,6 +102,23 @@ const ManageUser = () => {
       }
     });
   };
+  /////
+  const handleUpdateUser = (id) => {
+    if (!id) return;
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
+    navigate(`/dashboard/user/update?id=${id}`);
+  };
+  ///
+  const handleAddUser = () => {
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
+    navigate("/dashboard/user/useraddnew");
+  };
   const searchHandler = debounce((e) => {
     const query =
       e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
@@ -102,12 +127,12 @@ const ManageUser = () => {
   return (
     <div className="p-4">
       <div className="flex gap-3">
-        <Link
-          to={"/dashboard/user/useraddnew"}
-          className="p-3 bg-green-300 rounded-lg my-4 text-white"
+        <div
+          onClick={handleAddUser}
+          className="p-3 bg-green-300 rounded-lg my-4 text-white cursor-pointer"
         >
           Thêm User
-        </Link>
+        </div>
         <input
           type="text"
           placeholder="Search..."
@@ -156,11 +181,7 @@ const ManageUser = () => {
                   <td>{renderRoleLabel(user.role)}</td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <ActionUpdate
-                        onClick={() =>
-                          navigate(`/dashboard/user/update?id=${user.id}`)
-                        }
-                      />
+                      <ActionUpdate onClick={() => handleUpdateUser(user.id)} />
                       <ActionDelete onClick={() => handleDeleteUser(user)} />
                     </div>
                   </td>

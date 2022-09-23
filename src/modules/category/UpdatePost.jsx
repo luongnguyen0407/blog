@@ -32,6 +32,7 @@ import InputBorder from "../../components/dashboard/InputBorder";
 import Label from "../../components/dashboard/Label";
 import Radio from "../../components/dashboard/Radio";
 import Toggle from "../../components/dashboard/Toggle";
+import { useAuth } from "../../contexts/auth-context";
 import { db } from "../../firebase-app/firebase-config";
 import "../../pages/Dashboard/Post.scss";
 import fetchData from "../../utils/getDoc";
@@ -46,6 +47,7 @@ const UpdatePost = () => {
   const [contentPost, setContentPost] = useState("");
   const [param] = useSearchParams();
   const postId = param.get("id");
+  const { userInfor } = useAuth();
   if (!postId) return;
   //validate
   const schema = yup.object({
@@ -74,6 +76,10 @@ const UpdatePost = () => {
   const watchHot = watch("hot");
 
   const handleSaveValue = async (values) => {
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
     values.slug = slugify(values.slug || values.title, {
       lower: true,
       locale: "vi",

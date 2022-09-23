@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
   collection,
   deleteDoc,
@@ -8,17 +6,21 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../../firebase-app/firebase-config";
-import Slug from "./Slug";
-import ActionUpdate from "./iconAction/ActionUpdate";
-import ActionDelete from "./iconAction/ActionDelete";
-import ActionView from "./iconAction/ActionView";
 import { debounce } from "lodash";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useAuth } from "../../contexts/auth-context";
+import { db } from "../../firebase-app/firebase-config";
+import ActionDelete from "./iconAction/ActionDelete";
+import ActionUpdate from "./iconAction/ActionUpdate";
+import Slug from "./Slug";
 const Category = () => {
   const [category, setCategory] = useState([]);
   const [filter, setFilter] = useState("");
   const navigate = useNavigate();
+  const { userInfor } = useAuth();
   useEffect(() => {
     const colRef = collection(db, "category");
     const newRef = filter
@@ -39,8 +41,13 @@ const Category = () => {
       setCategory(resCategory);
     });
   }, [filter]);
+  ///////
   const handleDeleteCategory = async (categoryId) => {
     if (!categoryId) return;
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
     const colRef = doc(db, "category", categoryId);
     Swal.fire({
       title: "Bạn muốn xóa tag này ?",
@@ -56,6 +63,15 @@ const Category = () => {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
+  };
+  //////
+  const handleUpdateCategory = (id) => {
+    if (!id) return;
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
+    navigate(`/dashboard/category/updatecategory?id=${id}`);
   };
   const searchHandler = debounce((e) => {
     const query =
@@ -103,13 +119,8 @@ const Category = () => {
                   </td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <ActionView />
                       <ActionUpdate
-                        onClick={() =>
-                          navigate(
-                            `/dashboard/category/updatecategory?id=${ca.id}`
-                          )
-                        }
+                        onClick={() => handleUpdateCategory(ca.id)}
                       />
                       <ActionDelete
                         onClick={() => handleDeleteCategory(ca.id)}

@@ -13,8 +13,11 @@ import slugify from "slugify";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase-app/firebase-config";
 import { statusCategory } from "../../utils/Const";
+import { useAuth } from "../../contexts/auth-context";
 
 const AddCategory = () => {
+  const { userInfor } = useAuth();
+
   const schema = yup.object({
     name: yup
       .string()
@@ -43,6 +46,10 @@ const AddCategory = () => {
     }
   }, [errors]);
   const submitHandler = async (value) => {
+    if (userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3") {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
     if (!isValid) return;
     const cloneValue = { ...value };
     cloneValue.slug = slugify(cloneValue.name || cloneValue.slug, {

@@ -1,11 +1,14 @@
 import React from "react";
-import { statusCategory } from "../../utils/Const";
+import { statusCategory, statusUser } from "../../utils/Const";
 import PropTypes from "prop-types";
 
 const Slug = ({ status }) => {
   let style = "";
   switch (status) {
     case statusCategory.Unapproved:
+      style = "bg-red-50 text-red-400";
+      break;
+    case statusUser.Ban:
       style = "bg-red-50 text-red-400";
       break;
     case statusCategory.Approved:

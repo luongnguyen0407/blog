@@ -94,7 +94,7 @@ const AddNewPost = () => {
     const metadata = {
       contentType: "image/jpeg",
     };
-    const storageRef = ref(storage, "images/" + file.name);
+    const storageRef = ref(storage, "images/" + file.name + Date.now());
     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
     uploadTask.on(
       "state_changed",

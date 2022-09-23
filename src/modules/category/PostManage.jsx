@@ -24,11 +24,8 @@ const PostManage = () => {
   const [filter, setFilter] = useState("");
   const navigate = useNavigate();
   const { userInfor } = useAuth();
-  console.log(userInfor);
-
   useEffect(() => {
     const colRef = collection(db, "posts");
-    console.log(filter);
     const newRef = filter
       ? query(
           colRef,
@@ -49,7 +46,10 @@ const PostManage = () => {
   }, [filter, userInfor]);
   const handleDeletePost = async (post, urlImg) => {
     if (!post.id) return;
-    if (!(userInfor.uid === post.useCreatePost.id)) {
+    if (
+      userInfor.uid !== post.useCreatePost.id &&
+      userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3"
+    ) {
       toast.error("Bạn không có quyền thực hiệu thao tác này");
       return;
     }
@@ -71,6 +71,16 @@ const PostManage = () => {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
+  };
+  const handleUpdatePost = (post) => {
+    if (
+      userInfor.uid !== post.useCreatePost.id &&
+      userInfor.uid !== "OAJZZNGcxTWaSPCNJzMfk1crVkC3"
+    ) {
+      toast.error("Bạn không có quyền thực hiệu thao tác này");
+      return;
+    }
+    navigate(`/dashboard/post/updatepost?id=${post.id}`);
   };
   const handleDeleteImgDatabase = async (nameImg) => {
     if (nameImg) {
@@ -117,9 +127,9 @@ const PostManage = () => {
           </thead>
           <tbody>
             {posts.length <= 0 && (
-              <div className="font-semibold text-xl text-blue-300 mt-4">
-                Bạn chưa có bài viết nào
-              </div>
+              <tr>
+                <td>Bạn chưa có bài viết nào</td>
+              </tr>
             )}
             {posts.length > 0 &&
               posts.map((post) => (
@@ -137,11 +147,7 @@ const PostManage = () => {
                       <Link to={`/post/${post.slug}`}>
                         <ActionView />
                       </Link>
-                      <ActionUpdate
-                        onClick={() =>
-                          navigate(`/dashboard/post/updatepost?id=${post.id}`)
-                        }
-                      />
+                      <ActionUpdate onClick={() => handleUpdatePost(post)} />
                       <ActionDelete
                         onClick={() => handleDeletePost(post, post.imgUrl)}
                       />

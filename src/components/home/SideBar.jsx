@@ -35,7 +35,7 @@ const LIST_MENU = [
   },
 ];
 const SideBar = () => {
-  const [isZoom, setIsZoom] = useState(false);
+  const [isZoom, setIsZoom] = useState(true);
   const { userInfor } = useAuth();
   const ref = useRef(null);
   const handleSignOut = async () => {
@@ -60,7 +60,7 @@ const SideBar = () => {
       >
         <div
           onClick={() => setIsZoom(!isZoom)}
-          className="absolute py-2 rounded-tl-lg rounded-bl-lg text-white bg-blue-400 cursor-pointer top-2/4 -right-4 lg:right-0 -translate-y-2/4"
+          className="absolute py-2 rounded-lg lg:rounded-tl-lg lg:rounded-bl-lg text-white bg-blue-400 cursor-pointer top-2/4 -right-4 lg:right-0 -translate-y-2/4"
         >
           <AiOutlineDoubleRight
             className={`${isZoom ? "" : "rotate-180"} transition-all`}
