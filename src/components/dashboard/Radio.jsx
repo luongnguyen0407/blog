@@ -1,5 +1,7 @@
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { useController } from "react-hook-form";
+import ErrorFallback from "../Error/ErrorFallback";
 
 const Radio = ({ checked, children, control, name, ...rest }) => {
   const { field } = useController({
@@ -29,4 +31,6 @@ const Radio = ({ checked, children, control, name, ...rest }) => {
   );
 };
 
-export default Radio;
+export default withErrorBoundary(Radio, {
+  FallbackComponent: ErrorFallback,
+});

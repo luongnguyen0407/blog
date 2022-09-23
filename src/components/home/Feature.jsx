@@ -5,6 +5,8 @@ import { db } from "../../firebase-app/firebase-config";
 import CardFeature from "./CartFeature";
 import "swiper/css";
 import CardSkeleton from "../common/CardSkeleton";
+import { withErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../Error/ErrorFallback";
 
 const Feature = () => {
   const [postHot, setPostHot] = useState();
@@ -50,15 +52,11 @@ const Feature = () => {
       >
         {!postHot && (
           <>
-            <SwiperSlide>
-              <CardSkeleton />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardSkeleton />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardSkeleton />
-            </SwiperSlide>
+            {new Array(3).fill(0).map((i, index) => (
+              <SwiperSlide key={index}>
+                <CardSkeleton />
+              </SwiperSlide>
+            ))}
           </>
         )}
         {postHot &&
@@ -72,4 +70,6 @@ const Feature = () => {
   );
 };
 
-export default Feature;
+export default withErrorBoundary(Feature, {
+  FallbackComponent: ErrorFallback,
+});

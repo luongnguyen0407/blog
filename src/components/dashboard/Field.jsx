@@ -1,4 +1,6 @@
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../Error/ErrorFallback";
 
 const Field = ({ children, className = "" }) => {
   return (
@@ -8,4 +10,6 @@ const Field = ({ children, className = "" }) => {
   );
 };
 
-export default Field;
+export default withErrorBoundary(Field, {
+  FallbackComponent: ErrorFallback,
+});

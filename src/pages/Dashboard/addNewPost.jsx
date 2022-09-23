@@ -86,6 +86,7 @@ const AddNewPost = () => {
       locale: "vi",
       remove: /[*+~.()'"!:@]/g,
     });
+    toast.info("Đang đăng bài viết vui lòng chờ 1'30s -_-");
     await handleUploadImg(value.fileImg, value);
     // create post
   };
@@ -101,13 +102,11 @@ const AddNewPost = () => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
             break;
           case "running":
-            toast.info(`Đang tải ảnh lên ${Math.ceil(progress)}%`);
             break;
           default:
             console.log("Loi");

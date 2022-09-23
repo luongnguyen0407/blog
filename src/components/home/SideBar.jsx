@@ -19,19 +19,19 @@ import { toast } from "react-toastify";
 
 const LIST_MENU = [
   {
-    title: "Home",
+    title: "Trang chủ",
     icon: <AiOutlineHome />,
     path: "/",
   },
   {
-    title: "About",
+    title: "Hồ sơ",
     icon: <AiOutlineUser />,
     path: "/updateprofile",
   },
   {
-    title: "Post",
+    title: "Bài viết",
     icon: <AiOutlineMedicineBox />,
-    path: "/post",
+    path: "/dashboard/post",
   },
 ];
 const SideBar = () => {
@@ -101,16 +101,6 @@ const SideBar = () => {
                 to={item.path}
               ></NavItem>
             ))}
-            <NavLink
-              className="activeAdd bg-purple-200 rounded-lg"
-              to={"/dashboard/post"}
-            >
-              <div className="addPost flex py-10 justify-center cursor-pointer  items-center ">
-                <div className="rounded-full bg-white p-2  text-gray-400 font-bold">
-                  <AiOutlineFileAdd />
-                </div>
-              </div>
-            </NavLink>
           </nav>
         </div>
       </div>

@@ -6,6 +6,8 @@ import {
   AiOutlineSafety,
   AiOutlineUsergroupAdd,
 } from "react-icons/ai";
+import ErrorFallback from "../Error/ErrorFallback";
+import { withErrorBoundary } from "react-error-boundary";
 const LIST_NAV = [
   {
     title: "Post",
@@ -38,4 +40,6 @@ const NavDashBoard = () => {
   );
 };
 
-export default NavDashBoard;
+export default withErrorBoundary(NavDashBoard, {
+  FallbackComponent: ErrorFallback,
+});

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import fetchData from "../../utils/getDoc";
+import ErrorFallback from "../Error/ErrorFallback";
 import HeadingFe from "../home/HeadingFe";
 
 const Author = ({ author }) => {
@@ -31,4 +33,6 @@ const Author = ({ author }) => {
   );
 };
 
-export default Author;
+export default withErrorBoundary(Author, {
+  FallbackComponent: ErrorFallback,
+});

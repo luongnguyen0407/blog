@@ -1,6 +1,9 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { withErrorBoundary } from "react-error-boundary";
 import { db } from "../../firebase-app/firebase-config";
+import NewSkeleton from "../common/NewSkeleton";
+import ErrorFallback from "../Error/ErrorFallback";
 import CartCol from "./CartCol";
 import CartRow from "./CartRow";
 
@@ -27,7 +30,7 @@ const Newest = () => {
     };
     getData();
   }, []);
-  if (newest.length <= 0) return null;
+  if (newest.length <= 0) return <NewSkeleton />;
   const [first, ...other] = newest;
   return (
     <div className="grid md:grid-cols-2 gap-10">
@@ -47,4 +50,6 @@ const Newest = () => {
   );
 };
 
-export default Newest;
+export default withErrorBoundary(Newest, {
+  FallbackComponent: ErrorFallback,
+});

@@ -9,20 +9,14 @@ const Content = () => {
   return (
     <div className="mt-5">
       <div>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <HeadingFe>Feature</HeadingFe>
-          <Feature></Feature>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <HeadingFe>Newest update</HeadingFe>
-          <Newest></Newest>
-        </ErrorBoundary>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="mt-10">
-            <HeadingFe>Similar Post</HeadingFe>
-            <SimilarPost></SimilarPost>
-          </div>
-        </ErrorBoundary>
+        <HeadingFe>Feature</HeadingFe>
+        <Feature></Feature>
+        <HeadingFe>Newest update</HeadingFe>
+        <Newest></Newest>
+        <div className="mt-10">
+          <HeadingFe>Similar Post</HeadingFe>
+          <SimilarPost></SimilarPost>
+        </div>
       </div>
     </div>
   );

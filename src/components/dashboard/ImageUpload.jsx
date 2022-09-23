@@ -1,4 +1,7 @@
 import React from "react";
+import { withErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../Error/ErrorFallback";
+import PropTypes from "prop-types";
 
 const ImageUpload = (props) => {
   const {
@@ -70,5 +73,12 @@ const ImageUpload = (props) => {
     </div>
   );
 };
-
-export default ImageUpload;
+ImageUpload.propTypes = {
+  name: PropTypes.string,
+  className: PropTypes.string,
+  handleDeleteImg: PropTypes.func,
+  image: PropTypes.string,
+};
+export default withErrorBoundary(ImageUpload, {
+  FallbackComponent: ErrorFallback,
+});
