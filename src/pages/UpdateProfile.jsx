@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import Button from "../components/Button";
@@ -27,6 +28,8 @@ const UpdateProfile = () => {
   const [selectAvatarFile, setSelectAvatarFile] = useState();
   const [previewUrl, setPreviewUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const { userInfor } = useAuth();
   const schema = yup.object({
     username: yup.string().required("Bạn cần nhập username"),
@@ -59,7 +62,7 @@ const UpdateProfile = () => {
     setIsLoading(true);
     if (typeof values.fileImg === "object") {
       await handleUploadImg(values.fileImg, values);
-      const imageRegex = /%2F(\S+)\?/gm.exec(value.avatar);
+      const imageRegex = /%2F(\S+)\?/gm.exec(values.avatar);
       const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
       handleDeleteImgDatabase(imageName);
     } else if (typeof values.fileImg === "string") {
@@ -123,7 +126,6 @@ const UpdateProfile = () => {
   };
   const updateUser = async (avatarUrl, value) => {
     if (!isValid || !avatarUrl) return;
-
     const { email, password, username, address } = value;
     const imgName = value.fileImg.name;
     try {
@@ -188,15 +190,20 @@ const UpdateProfile = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (!userInfor.uid) return;
+    if (!userInfor?.uid) {
+      navigate("/login");
+      toast.warning("Bạn cần đăng nhập");
+      return;
+    }
+    console.log("ok");
     async function getData() {
-      const res = await fetchData("users", userInfor.uid);
+      const res = await fetchData("users", userInfor?.uid);
       reset(res);
       setValue("fileImg", res.avatar);
       setPreviewUrl(res.avatar);
     }
     getData();
-  }, [!userInfor.uid]);
+  }, [userInfor]);
 
   //delete img preview
   const handleDeleteImg = () => {
@@ -204,7 +211,7 @@ const UpdateProfile = () => {
     setPreviewUrl(undefined);
   };
   const watchfileImg = watch("fileImg");
-  if (!userInfor.uid) return <PageNotFound />;
+  if (!userInfor?.uid) return <PageNotFound />;
   return (
     <div className="p-6 flex-1">
       <div className="mb-2">

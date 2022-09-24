@@ -26,13 +26,17 @@ const PostManage = () => {
   const { userInfor } = useAuth();
   useEffect(() => {
     const colRef = collection(db, "posts");
+    const refCheck =
+      userInfor?.uid === "OAJZZNGcxTWaSPCNJzMfk1crVkC3"
+        ? colRef
+        : query(colRef, where("useCreatePost.id", "==", userInfor?.uid || "h"));
     const newRef = filter
       ? query(
           colRef,
           where("title", ">=", filter),
           where("title", "<=", filter + "utf8")
         )
-      : query(colRef, where("useCreatePost.id", "==", userInfor?.uid || "h"));
+      : refCheck;
     onSnapshot(newRef, (snapshot) => {
       let resPost = [];
       snapshot.forEach((doc) => {

@@ -63,7 +63,6 @@ const AddNewPost = () => {
       title: "",
       slug: "",
       status: 2,
-      category: "",
       hot: false,
     },
   });

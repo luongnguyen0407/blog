@@ -3,8 +3,6 @@ import Feature from "./Feature";
 import HeadingFe from "./HeadingFe";
 import Newest from "./Newest";
 import SimilarPost from "./SimilarPost";
-import { ErrorBoundary } from "react-error-boundary";
-import ErrorFallback from "../Error/ErrorFallback";
 const Content = () => {
   return (
     <div className="mt-5">

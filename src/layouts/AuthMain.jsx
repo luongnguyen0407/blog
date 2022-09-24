@@ -8,7 +8,6 @@ const AuthMain = ({ children }) => {
   const navigate = useNavigate();
   const { userInfor } = useAuth();
   useEffect(() => {
-    document.title = "Đăng Ký";
     if (userInfor?.email) {
       navigate("/");
     }
